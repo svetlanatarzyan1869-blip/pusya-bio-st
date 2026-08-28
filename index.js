@@ -78,7 +78,7 @@ try {
   // ── ВШИТЫЙ прокси (production-домен проекта pusya-bio-proxy на Vercel) ──
   // Если у прокси другой домен — поменяй тут и пересобери (build.py).
   var PROXY_URL = 'https://pusya-bio-proxy.vercel.app/api/bio';
-  var CSS = ''; // стили инжектятся в родительский документ (build.py подставит)
+  var CSS = "#pb-root{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}\n\n/* плавающий полупрозрачный кружок 🌸 (fixed, в родительском документе) */\n#pb-root .pb-fab{position:fixed;right:14px;bottom:92px;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:23px;line-height:1;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;border:1px solid rgba(240,168,196,0.4);background:rgba(30,20,26,0.6);color:#f0a8c4;opacity:.62;z-index:2147483000;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 4px 16px rgba(0,0,0,0.45);transition:opacity .2s,background .2s,box-shadow .2s;}\n#pb-root .pb-fab:hover{opacity:1;background:rgba(240,168,196,0.24);box-shadow:0 0 16px rgba(240,168,196,0.45);}\n#pb-root .pb-fab:active{cursor:grabbing;}\n#pb-root.open .pb-fab{opacity:1;background:rgba(240,168,196,0.28);}\n\n/* всплывающая плашка (fixed, над кружком) */\n#pb-root .pb-pop{position:fixed;right:12px;left:auto;bottom:124px;width:min(420px,calc(100vw - 24px));box-sizing:border-box;max-height:70vh;overflow:auto;z-index:2147483000;display:none;padding:11px 12px;border-radius:16px;border:1px solid rgba(240,168,196,0.3);background:rgba(18,12,16,0.98);-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);box-shadow:0 14px 44px rgba(0,0,0,0.6),0 0 18px rgba(240,168,196,0.12);animation:pb-pop-in .18s ease;}\n#pb-root.open .pb-pop{display:block;}\n@keyframes pb-pop-in{from{opacity:0;transform:translateY(8px) scale(.98);}to{opacity:1;transform:none;}}\n\n#pb-root .pb-pop-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px;}\n#pb-root .pb-tabs{display:flex;gap:3px;}\n#pb-root .pb-tab{background:none;border:none;color:#c8b0c0;font-size:15px;cursor:pointer;padding:2px 7px;border-radius:9px;opacity:.5;transition:opacity .15s,background .15s;}\n#pb-root .pb-tab:hover{opacity:.85;}\n#pb-root .pb-tab.on{opacity:1;background:rgba(240,168,196,0.18);}\n#pb-root .pb-cal-day:hover{filter:brightness(1.25);}\n#pb-root .pb-cal-act{font:inherit;font-size:10px;color:#f5d8e6;background:rgba(240,168,196,0.14);border:1px solid rgba(240,168,196,0.28);border-radius:9px;padding:5px 9px;cursor:pointer;}\n#pb-root .pb-cal-act:hover{background:rgba(240,168,196,0.24);}\n#pb-root .pb-more-btn{text-align:center;font-size:10px;color:#e6c8dc;opacity:.85;cursor:pointer;padding:7px 4px 3px;letter-spacing:.02em;user-select:none;-webkit-user-select:none;}\n#pb-root .pb-more-btn:hover{opacity:1;color:#f0d4e2;}\n#pb-root .pb-title{font-size:12px;font-weight:600;letter-spacing:.02em;color:#f5e6ef;opacity:.9;}\n#pb-root .pb-tools{display:flex;align-items:center;gap:2px;}\n#pb-root .pb-tools button{background:none;border:none;color:#f0d4e2;font-size:13px;cursor:pointer;opacity:.6;padding:2px 5px;border-radius:8px;transition:opacity .15s,transform .2s,background .15s;}\n#pb-root .pb-tools button:hover{opacity:1;background:rgba(240,168,196,0.14);}\n#pb-root .pb-refresh.spin{animation:pb-spin .9s linear infinite;opacity:1;}\n@keyframes pb-spin{to{transform:rotate(360deg);}}\n\n#pb-root .pb-cap{font-size:12px;color:#e6d4ec;opacity:.8;padding:6px 2px;animation:pb-pulse 1.3s ease-in-out infinite;}\n#pb-root .pb-err{font-size:12px;color:#f0a0b4;padding:6px 2px;line-height:1.4;}\n@keyframes pb-pulse{0%,100%{opacity:.5;}50%{opacity:1;}}\n\n#pb-root .pb-widget{max-width:420px;margin:0 auto;}\n#pb-root .pb-widget details[open] .pb-arrow{transform:rotate(180deg);}\n#pb-root .pb-widget summary::-webkit-details-marker{display:none;}\n@keyframes pb-mpulse{0%,100%{box-shadow:0 0 8px currentColor;}50%{box-shadow:0 0 18px currentColor;}}\n\n/* форма настроек */\n#pb-root .pb-form{display:flex;flex-direction:column;gap:3px;font-size:12px;color:#f0e0ea;}\n#pb-root .pb-form label{opacity:.75;margin-top:6px;}\n#pb-root .pb-i{width:100%;box-sizing:border-box;background:rgba(255,255,255,0.05);border:1px solid rgba(240,168,196,0.22);border-radius:8px;padding:7px 9px;color:#fff;font:inherit;font-size:12px;outline:none;}\n#pb-root .pb-i:focus{border-color:rgba(240,168,196,0.5);}\n#pb-root .pb-form-btns{display:flex;gap:8px;margin-top:11px;}\n#pb-root .pb-save,#pb-root .pb-cancel{border:1px solid rgba(240,168,196,0.28);background:rgba(240,168,196,0.12);color:#fbeef4;font:inherit;font-size:12px;font-weight:600;padding:7px 13px;border-radius:10px;cursor:pointer;}\n#pb-root .pb-save:hover,#pb-root .pb-cancel:hover{background:rgba(240,168,196,0.2);}\n#pb-root .pb-hint{font-size:10px;color:#cbb0c4;opacity:.7;line-height:1.35;margin-top:9px;}"; // стили инжектятся в родительский документ (build.py подставит)
   var MARKUP =
     '<button class="pb-fab" type="button" title="цикл и беременность">🌸</button>' +
     '<div class="pb-pop">' +
@@ -110,6 +110,8 @@ try {
   var refBtn = root.querySelector('.pb-refresh');
   var gearBtn = root.querySelector('.pb-gear');
   var closeBtn = root.querySelector('.pb-close');
+  // критичные стили кружка инлайном — чтобы он был виден даже если внешний CSS не подхватился (некоторые мобильные)
+  try { fab.style.cssText += ';position:fixed;right:14px;bottom:92px;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:23px;line-height:1;z-index:2147483000;background:rgba(30,20,26,0.82);color:#f0a8c4;border:1px solid rgba(240,168,196,0.5);cursor:grab;touch-action:none;'; } catch (e) {}
 
   var INJECT_FILE = 'pusya_bio_inject'; // мост к плагину: он дописывает это в промпт модели
   var cfg = (await tavo.get(CFG_KEY, 'global')) || {};
@@ -1144,8 +1146,10 @@ try {
     if (st && st.fields) renderState(st.fields); else genBio();
   }
   // всплывашку ставим рядом с кружком, куда бы его ни отодвинули
+  var popMoved = false; // плашку подвинули вручную — не переанкорим её к кружку
   function placePop() {
     if (!root.classList.contains('open')) return;
+    if (popMoved) return;
     var r = fab.getBoundingClientRect();
     var vw = pwin.innerWidth || pdoc.documentElement.clientWidth || 360;
     var vh = pwin.innerHeight || pdoc.documentElement.clientHeight || 640;
@@ -1162,7 +1166,7 @@ try {
   }
 
   var opened = false;
-  function openPop() { root.classList.add('open'); placePop(); if (!opened) { opened = true; fillOnOpen(); } else { placePop(); } }
+  function openPop() { popMoved = false; root.classList.add('open'); placePop(); if (!opened) { opened = true; fillOnOpen(); } else { placePop(); } }
   function closePop() { root.classList.remove('open'); }
 
   // ── перетаскивание кружка (позиция сохраняется) ──
@@ -1204,6 +1208,39 @@ try {
     }
     fab.addEventListener('mousedown', down); pwin.addEventListener('mousemove', move); pwin.addEventListener('mouseup', up);
     fab.addEventListener('touchstart', down, { passive: false }); pwin.addEventListener('touchmove', move, { passive: false }); pwin.addEventListener('touchend', up);
+  })();
+
+  // перетаскивание самой плашки за её шапку (кроме кнопок). move/up вешаем только на время драга — без утечки
+  (function makePopDraggable() {
+    var head = root.querySelector('.pb-pop-head'); if (!head) return;
+    head.style.cursor = 'grab'; head.style.touchAction = 'none';
+    var sx = 0, sy = 0, ox = 0, oy = 0;
+    function move(e) {
+      if (!alive()) return;
+      var p = e.touches ? e.touches[0] : e;
+      var vw = pwin.innerWidth, vh = pwin.innerHeight, w = pop.offsetWidth, h = pop.offsetHeight;
+      var nl = Math.min(Math.max(6, ox + (p.clientX - sx)), Math.max(6, vw - w - 6));
+      var nt = Math.min(Math.max(6, oy + (p.clientY - sy)), Math.max(6, vh - h - 6));
+      popMoved = true;
+      pop.style.left = nl + 'px'; pop.style.top = nt + 'px'; pop.style.right = 'auto'; pop.style.bottom = 'auto';
+      if (e.cancelable) e.preventDefault();
+    }
+    function up() {
+      pop.style.transition = ''; head.style.cursor = 'grab';
+      pwin.removeEventListener('mousemove', move); pwin.removeEventListener('mouseup', up);
+      pwin.removeEventListener('touchmove', move); pwin.removeEventListener('touchend', up);
+    }
+    function down(e) {
+      if (e.target && e.target.closest && e.target.closest('button')) return; // клики по вкладкам/кнопкам не тащат
+      var p = e.touches ? e.touches[0] : e;
+      var r = pop.getBoundingClientRect(); ox = r.left; oy = r.top; sx = p.clientX; sy = p.clientY;
+      pop.style.transition = 'none'; head.style.cursor = 'grabbing';
+      pwin.addEventListener('mousemove', move); pwin.addEventListener('mouseup', up);
+      pwin.addEventListener('touchmove', move, { passive: false }); pwin.addEventListener('touchend', up);
+      if (e.cancelable) e.preventDefault();
+    }
+    head.addEventListener('mousedown', down);
+    head.addEventListener('touchstart', down, { passive: false });
   })();
 
   closeBtn.addEventListener('click', function (e) { e.stopPropagation(); closePop(); });
