@@ -62,9 +62,12 @@ const tavo = {
 
 // события таверны → оконные события, которые слушает ядро плашки
 function pbMsg() { try { window.dispatchEvent(new CustomEvent('pusya-bio-msg')); } catch (e) {} }
+function pbChat() { try { window.dispatchEvent(new CustomEvent('pusya-bio-chat')); } catch (e) {} }
 try {
-  ['MESSAGE_RECEIVED', 'MESSAGE_SENT', 'MESSAGE_SWIPED', 'MESSAGE_EDITED', 'MESSAGE_DELETED', 'MESSAGE_UPDATED', 'CHAT_CHANGED']
+  ['MESSAGE_RECEIVED', 'MESSAGE_SENT', 'MESSAGE_SWIPED', 'MESSAGE_EDITED', 'MESSAGE_DELETED', 'MESSAGE_UPDATED']
     .forEach(function (k) { if (event_types[k]) eventSource.on(event_types[k], pbMsg); });
+  // смена/загрузка чата — отдельным событием: ядро сбросит месяц календаря и перерисует
+  if (event_types.CHAT_CHANGED) eventSource.on(event_types.CHAT_CHANGED, pbChat);
 } catch (e) {}
 
 /* ===================== НИЖЕ — ЯДРО ИЗ src/panel.js (авто) ===================== */
@@ -1128,7 +1131,11 @@ try {
     var total = await tavo.message.count();
     var due = !st || (total - (st.count || 0)) >= everyN();
     if (due) { genBio(); }            // сам посчитает, сохранит и запишет инжект
-    else { writeInject(st.fields); }  // мост из перенесённого состояния
+    else {
+      writeInject(st.fields);         // мост из перенесённого состояния
+      // если плашка открыта — освежаем видимое (важно при смене чата: DOM не перемонтируется)
+      if (root.classList.contains('open')) { if (view === 'cal') renderCalendar(); else if (st.fields) renderState(st.fields); }
+    }
   }
 
   async function fillOnOpen() {
@@ -1161,7 +1168,14 @@ try {
   // ── перетаскивание кружка (позиция сохраняется) ──
   var FABPOS_KEY = 'pusya_bio_fabpos';
   (function loadFabPos() {
-    try { var s = pwin.localStorage.getItem(FABPOS_KEY); if (s) { var o = JSON.parse(s); if (o && o.left != null) { fab.style.left = o.left + 'px'; fab.style.top = o.top + 'px'; fab.style.right = 'auto'; fab.style.bottom = 'auto'; } } } catch (e) {}
+    try {
+      var s = pwin.localStorage.getItem(FABPOS_KEY); if (!s) return;
+      var o = JSON.parse(s); if (!o || o.left == null) return;
+      // клемпим к текущему вьюпорту — иначе позиция с широкого экрана уводит кружок за край телефона
+      var vw = pwin.innerWidth || 360, vh = pwin.innerHeight || 640, w = 44, h = 44;
+      var left = Math.min(Math.max(2, o.left), vw - w - 2), top = Math.min(Math.max(2, o.top), vh - h - 2);
+      fab.style.left = left + 'px'; fab.style.top = top + 'px'; fab.style.right = 'auto'; fab.style.bottom = 'auto';
+    } catch (e) {}
   })();
   (function makeDraggable() {
     var dragging = false, moved = false, sx = 0, sy = 0, ox = 0, oy = 0;
@@ -1206,6 +1220,13 @@ try {
   var freshT = null;
   function scheduleFresh() { if (freshT) return; freshT = setTimeout(function () { freshT = null; if (alive()) ensureFresh(); }, 350); }
   function onMsg() { if (alive()) scheduleFresh(); }
+  async function onChat() {
+    if (!alive()) return;
+    viewMonth = null; selDay = null; // календарь пересчитает месяц от даты нового чата
+    try { var _cc = await tavo.chat.current(); charName = (_cc && _cc.characters && _cc.characters[0] && _cc.characters[0].name) || charName; } catch (e) {}
+    cfg = (await tavo.get(CFG_KEY, 'global')) || cfg;
+    scheduleFresh(); // подтянет состояние нового чата и перерисует открытый вид
+  }
   function onOpen() { if (alive() && !root.classList.contains('open')) openPop(); }
   function onDate() { if (alive() && view === 'cal') renderCalendar(); }
   function onResize() {
@@ -1220,12 +1241,14 @@ try {
   try { if (typeof pwin.__PB_cleanup === 'function') pwin.__PB_cleanup(); } catch (e) {}
   try {
     pwin.addEventListener('pusya-bio-msg', onMsg);
+    pwin.addEventListener('pusya-bio-chat', onChat);
     pwin.addEventListener('pusya-bio-open', onOpen);
     pwin.addEventListener('pusya-bio-date', onDate);
     pwin.addEventListener('resize', onResize);
     pwin.__PB_cleanup = function () {
       try {
         pwin.removeEventListener('pusya-bio-msg', onMsg);
+        pwin.removeEventListener('pusya-bio-chat', onChat);
         pwin.removeEventListener('pusya-bio-open', onOpen);
         pwin.removeEventListener('pusya-bio-date', onDate);
         pwin.removeEventListener('resize', onResize);
