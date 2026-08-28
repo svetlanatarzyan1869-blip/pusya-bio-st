@@ -70,24 +70,6 @@ try {
   if (event_types.CHAT_CHANGED) eventSource.on(event_types.CHAT_CHANGED, pbChat);
 } catch (e) {}
 
-// ВРЕМЕННО (диагностика телефона): через 2.5с снимаем реальную геометрию кружка и показываем тостом.
-try {
-  setTimeout(function () {
-    try {
-      var r = document.getElementById('pb-root');
-      if (!r) { window.toastr && window.toastr.error('pb-root НЕ найден в DOM'); return; }
-      var inBody = (r.parentNode === document.body) ? 'body' : (r.parentNode && r.parentNode.tagName || '?');
-      var f = r.querySelector('.pb-fab');
-      if (!f) { window.toastr && window.toastr.error('кружок .pb-fab не найден; root в ' + inBody); return; }
-      var b = f.getBoundingClientRect(), cs = getComputedStyle(f);
-      var msg = 'fab ' + Math.round(b.left) + ',' + Math.round(b.top) + ' ' + Math.round(b.width) + 'x' + Math.round(b.height) +
-        ' | pos:' + cs.position + ' disp:' + cs.display + ' vis:' + cs.visibility + ' op:' + cs.opacity + ' z:' + cs.zIndex +
-        ' | root@' + inBody + ' | vp ' + window.innerWidth + 'x' + window.innerHeight;
-      window.toastr && window.toastr.warning(msg, 'pb-diag', { timeOut: 20000, extendedTimeOut: 20000 });
-    } catch (e) { try { window.toastr && window.toastr.error('diag err: ' + (e && e.message)); } catch (e2) {} }
-  }, 2500);
-} catch (e) {}
-
 /* ===================== НИЖЕ — ЯДРО ИЗ src/panel.js (авто) ===================== */
 
 (async function () {
@@ -1186,7 +1168,8 @@ try {
     if (r.top - ph - 10 >= 8) top = r.top - ph - 10;
     else if (r.bottom + ph + 10 <= vh - 8) top = r.bottom + 10;
     else top = Math.max(8, vh - ph - 8);
-    pop.style.left = left + 'px'; pop.style.top = top + 'px';
+    var o = cbOrigin(pop); // перевод в координаты контейнинг-блока (устойчиво к трансформированному родителю)
+    pop.style.left = (left - o.x) + 'px'; pop.style.top = (top - o.y) + 'px';
     pop.style.right = 'auto'; pop.style.bottom = 'auto';
   }
 
@@ -1196,21 +1179,35 @@ try {
 
   // ── перетаскивание кружка (позиция сохраняется) ──
   var FABPOS_KEY = 'pusya_bio_fabpos';
+  // ── координаты ВЬЮПОРТА, устойчивые к трансформированному родителю (iOS Safari + мобильные скины) ──
+  // Если body/контейнер имеет transform, position:fixed считается от него, а не от экрана.
+  // Меряем, где оказался origin контейнинг-блока элемента, и переводим желаемые экранные координаты в left/top.
+  function cbOrigin(el) {
+    var sl = el.style.left, st = el.style.top, sr = el.style.right, sb = el.style.bottom;
+    el.style.right = 'auto'; el.style.bottom = 'auto'; el.style.left = '0px'; el.style.top = '0px';
+    var r = el.getBoundingClientRect();
+    el.style.left = sl; el.style.top = st; el.style.right = sr; el.style.bottom = sb;
+    return { x: r.left, y: r.top };
+  }
+  function clampVX(vx) { var w = 44; return Math.min(Math.max(2, vx), (pwin.innerWidth || 360) - w - 2); }
+  function clampVY(vy) { var h = 44; return Math.min(Math.max(2, vy), (pwin.innerHeight || 640) - h - 2); }
+  function placeFabViewport(vx, vy) {
+    var o = cbOrigin(fab);
+    fab.style.left = (clampVX(vx) - o.x) + 'px'; fab.style.top = (clampVY(vy) - o.y) + 'px';
+    fab.style.right = 'auto'; fab.style.bottom = 'auto';
+  }
   (function loadFabPos() {
-    try {
-      var s = pwin.localStorage.getItem(FABPOS_KEY); if (!s) return;
-      var o = JSON.parse(s); if (!o || o.left == null) return;
-      // клемпим к текущему вьюпорту — иначе позиция с широкого экрана уводит кружок за край телефона
-      var vw = pwin.innerWidth || 360, vh = pwin.innerHeight || 640, w = 44, h = 44;
-      var left = Math.min(Math.max(2, o.left), vw - w - 2), top = Math.min(Math.max(2, o.top), vh - h - 2);
-      fab.style.left = left + 'px'; fab.style.top = top + 'px'; fab.style.right = 'auto'; fab.style.bottom = 'auto';
-    } catch (e) {}
+    var vw = pwin.innerWidth || 360, vh = pwin.innerHeight || 640;
+    var vx = vw - 58, vy = vh - 140; // дефолт: правый нижний угол
+    try { var s = pwin.localStorage.getItem(FABPOS_KEY); if (s) { var o = JSON.parse(s); if (o && o.vx != null) { vx = o.vx; vy = o.vy; } } } catch (e) {}
+    placeFabViewport(vx, vy);
   })();
   (function makeDraggable() {
-    var dragging = false, moved = false, sx = 0, sy = 0, ox = 0, oy = 0;
+    var dragging = false, moved = false, sx = 0, sy = 0, svx = 0, svy = 0, orig = { x: 0, y: 0 };
     function down(e) {
       var p = e.touches ? e.touches[0] : e; dragging = true; moved = false;
-      var r = fab.getBoundingClientRect(); ox = r.left; oy = r.top; sx = p.clientX; sy = p.clientY;
+      var r = fab.getBoundingClientRect(); svx = r.left; svy = r.top; sx = p.clientX; sy = p.clientY;
+      orig = cbOrigin(fab); // origin контейнинг-блока фиксируем один раз на время драга
       fab.style.transition = 'none';
       if (e.cancelable) e.preventDefault();
     }
@@ -1219,16 +1216,15 @@ try {
       var p = e.touches ? e.touches[0] : e;
       var dx = p.clientX - sx, dy = p.clientY - sy;
       if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
-      var vw = pwin.innerWidth, vh = pwin.innerHeight, w = fab.offsetWidth, h = fab.offsetHeight;
-      var nl = Math.min(Math.max(2, ox + dx), vw - w - 2), nt = Math.min(Math.max(2, oy + dy), vh - h - 2);
-      fab.style.left = nl + 'px'; fab.style.top = nt + 'px'; fab.style.right = 'auto'; fab.style.bottom = 'auto';
+      var vx = clampVX(svx + dx), vy = clampVY(svy + dy);
+      fab.style.left = (vx - orig.x) + 'px'; fab.style.top = (vy - orig.y) + 'px'; fab.style.right = 'auto'; fab.style.bottom = 'auto';
       if (root.classList.contains('open')) placePop();
       if (e.cancelable) e.preventDefault();
     }
     function up() {
       if (!dragging || !alive()) return; dragging = false; fab.style.transition = '';
       var r = fab.getBoundingClientRect();
-      if (moved) { try { pwin.localStorage.setItem(FABPOS_KEY, JSON.stringify({ left: r.left, top: r.top })); } catch (e) {} }
+      if (moved) { try { pwin.localStorage.setItem(FABPOS_KEY, JSON.stringify({ vx: r.left, vy: r.top })); } catch (e) {} }
       else { if (root.classList.contains('open')) closePop(); else openPop(); }
     }
     fab.addEventListener('mousedown', down); pwin.addEventListener('mousemove', move); pwin.addEventListener('mouseup', up);
@@ -1239,15 +1235,15 @@ try {
   (function makePopDraggable() {
     var head = root.querySelector('.pb-pop-head'); if (!head) return;
     head.style.cursor = 'grab'; head.style.touchAction = 'none';
-    var sx = 0, sy = 0, ox = 0, oy = 0;
+    var sx = 0, sy = 0, ovx = 0, ovy = 0, orig = { x: 0, y: 0 };
     function move(e) {
       if (!alive()) return;
       var p = e.touches ? e.touches[0] : e;
       var vw = pwin.innerWidth, vh = pwin.innerHeight, w = pop.offsetWidth, h = pop.offsetHeight;
-      var nl = Math.min(Math.max(6, ox + (p.clientX - sx)), Math.max(6, vw - w - 6));
-      var nt = Math.min(Math.max(6, oy + (p.clientY - sy)), Math.max(6, vh - h - 6));
+      var vx = Math.min(Math.max(6, ovx + (p.clientX - sx)), Math.max(6, vw - w - 6));
+      var vy = Math.min(Math.max(6, ovy + (p.clientY - sy)), Math.max(6, vh - h - 6));
       popMoved = true;
-      pop.style.left = nl + 'px'; pop.style.top = nt + 'px'; pop.style.right = 'auto'; pop.style.bottom = 'auto';
+      pop.style.left = (vx - orig.x) + 'px'; pop.style.top = (vy - orig.y) + 'px'; pop.style.right = 'auto'; pop.style.bottom = 'auto';
       if (e.cancelable) e.preventDefault();
     }
     function up() {
@@ -1258,7 +1254,8 @@ try {
     function down(e) {
       if (e.target && e.target.closest && e.target.closest('button')) return; // клики по вкладкам/кнопкам не тащат
       var p = e.touches ? e.touches[0] : e;
-      var r = pop.getBoundingClientRect(); ox = r.left; oy = r.top; sx = p.clientX; sy = p.clientY;
+      var r = pop.getBoundingClientRect(); ovx = r.left; ovy = r.top; sx = p.clientX; sy = p.clientY;
+      orig = cbOrigin(pop);
       pop.style.transition = 'none'; head.style.cursor = 'grabbing';
       pwin.addEventListener('mousemove', move); pwin.addEventListener('mouseup', up);
       pwin.addEventListener('touchmove', move, { passive: false }); pwin.addEventListener('touchend', up);
@@ -1293,10 +1290,8 @@ try {
   function onDate() { if (alive() && view === 'cal') renderCalendar(); }
   function onResize() {
     if (!alive()) return;
-    var vw = pwin.innerWidth, vh = pwin.innerHeight, r = fab.getBoundingClientRect(), w = fab.offsetWidth, h = fab.offsetHeight;
-    fab.style.left = Math.min(Math.max(2, r.left), vw - w - 2) + 'px';
-    fab.style.top = Math.min(Math.max(2, r.top), vh - h - 2) + 'px';
-    fab.style.right = 'auto'; fab.style.bottom = 'auto';
+    var r = fab.getBoundingClientRect();
+    placeFabViewport(r.left, r.top); // держим кружок в экране в координатах вьюпорта
     if (root.classList.contains('open')) placePop();
   }
   // снимаем слушателей прошлого монтирования — иначе за длинный чат они копятся и тормозят
