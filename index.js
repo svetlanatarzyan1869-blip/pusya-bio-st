@@ -70,6 +70,10 @@ try {
   if (event_types.CHAT_CHANGED) eventSource.on(event_types.CHAT_CHANGED, pbChat);
 } catch (e) {}
 
+// ВРЕМЕННО (диагностика телефона): подтверждаем, что модуль вообще загрузился на клиенте.
+// Если тост виден на телефоне — модуль грузится, дело в самом кружке; если нет — модуль не стартует.
+try { if (window.toastr) window.toastr.info('🌸 Цикл: расширение загрузилось', '', { timeOut: 3000 }); } catch (e) {}
+
 /* ===================== НИЖЕ — ЯДРО ИЗ src/panel.js (авто) ===================== */
 
 (async function () {
@@ -110,8 +114,15 @@ try {
   var refBtn = root.querySelector('.pb-refresh');
   var gearBtn = root.querySelector('.pb-gear');
   var closeBtn = root.querySelector('.pb-close');
-  // критичные стили кружка инлайном — чтобы он был виден даже если внешний CSS не подхватился (некоторые мобильные)
-  try { fab.style.cssText += ';position:fixed;right:14px;bottom:92px;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:23px;line-height:1;z-index:2147483000;background:rgba(30,20,26,0.82);color:#f0a8c4;border:1px solid rgba(240,168,196,0.5);cursor:grab;touch-action:none;'; } catch (e) {}
+  // критичные стили кружка инлайном + !important — чтобы был виден даже если внешний CSS не подхватился/перекрыт (мобильные)
+  try {
+    fab.style.cssText += ';right:14px;bottom:92px;width:44px;height:44px;border-radius:50%;align-items:center;justify-content:center;font-size:23px;line-height:1;background:rgba(30,20,26,0.82);color:#f0a8c4;border:1px solid rgba(240,168,196,0.5);cursor:grab;touch-action:none;';
+    fab.style.setProperty('position', 'fixed', 'important');
+    fab.style.setProperty('display', 'flex', 'important');
+    fab.style.setProperty('visibility', 'visible', 'important');
+    fab.style.setProperty('opacity', '1', 'important');
+    fab.style.setProperty('z-index', '2147483000', 'important');
+  } catch (e) {}
 
   var INJECT_FILE = 'pusya_bio_inject'; // мост к плагину: он дописывает это в промпт модели
   var cfg = (await tavo.get(CFG_KEY, 'global')) || {};
