@@ -70,9 +70,23 @@ try {
   if (event_types.CHAT_CHANGED) eventSource.on(event_types.CHAT_CHANGED, pbChat);
 } catch (e) {}
 
-// ВРЕМЕННО (диагностика телефона): подтверждаем, что модуль вообще загрузился на клиенте.
-// Если тост виден на телефоне — модуль грузится, дело в самом кружке; если нет — модуль не стартует.
-try { if (window.toastr) window.toastr.info('🌸 Цикл: расширение загрузилось', '', { timeOut: 3000 }); } catch (e) {}
+// ВРЕМЕННО (диагностика телефона): через 2.5с снимаем реальную геометрию кружка и показываем тостом.
+try {
+  setTimeout(function () {
+    try {
+      var r = document.getElementById('pb-root');
+      if (!r) { window.toastr && window.toastr.error('pb-root НЕ найден в DOM'); return; }
+      var inBody = (r.parentNode === document.body) ? 'body' : (r.parentNode && r.parentNode.tagName || '?');
+      var f = r.querySelector('.pb-fab');
+      if (!f) { window.toastr && window.toastr.error('кружок .pb-fab не найден; root в ' + inBody); return; }
+      var b = f.getBoundingClientRect(), cs = getComputedStyle(f);
+      var msg = 'fab ' + Math.round(b.left) + ',' + Math.round(b.top) + ' ' + Math.round(b.width) + 'x' + Math.round(b.height) +
+        ' | pos:' + cs.position + ' disp:' + cs.display + ' vis:' + cs.visibility + ' op:' + cs.opacity + ' z:' + cs.zIndex +
+        ' | root@' + inBody + ' | vp ' + window.innerWidth + 'x' + window.innerHeight;
+      window.toastr && window.toastr.warning(msg, 'pb-diag', { timeOut: 20000, extendedTimeOut: 20000 });
+    } catch (e) { try { window.toastr && window.toastr.error('diag err: ' + (e && e.message)); } catch (e2) {} }
+  }, 2500);
+} catch (e) {}
 
 /* ===================== НИЖЕ — ЯДРО ИЗ src/panel.js (авто) ===================== */
 
