@@ -1117,8 +1117,17 @@ try {
       var last = await tavo.get(ST_KEY, 'chat');
       var messages = [{ role: 'system', content: buildSystem() }, { role: 'user', content: buildUserPrompt(cx, last && last.fields, lock, storedISO) }];
       var raw = await callModel(messages);
+      // пустой ответ (частый случай у gemini: весь лимит съело «мышление» или сработали фильтры)
+      if (!String(raw || '').trim()) throw new Error('модель вернула пустой ответ. Обычно это лимит токенов (у gemini его съедает «мышление») или фильтры провайдера — попробуй другую модель-считалку.');
       var f = parseBlock(raw);
+      if (!Object.keys(f).length) throw new Error('не разобрать ответ модели: ' + esc(String(raw).slice(0, 140)));
       if (!f.state) f.state = (f.pp_day != null ? 'postpartum' : f.knot != null ? 'rut' : f.slick != null ? 'heat' : f.week != null ? 'pregnancy' : f.day != null ? ((mode() === 'omega' && dyn() === 'omega') ? 'heat' : 'cycle') : 'none');
+      // НЕ затираем рабочее состояние пустышкой (иначе плашка «пропадает» после одного сбойного ответа)
+      if (f.state === 'none' && last && last.fields && last.fields.state && last.fields.state !== 'none') {
+        writeInject(last.fields);
+        if (view === 'cal') renderCalendar(); else renderState(last.fields);
+        return;
+      }
       // дата из СЮЖЕТА (считалка читает историю) — определяет дату даже в существующем чате
       if (/^\d{4}-\d{2}-\d{2}$/.test(String(f.date || '')) && f.date !== storedISO) { await saveGameDate(parseISO(f.date)); gd = parseISO(f.date); }
       f = await applyAnchor(f, gd);
