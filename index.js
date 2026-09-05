@@ -78,6 +78,7 @@ try {
   // ── ВШИТЫЙ прокси (production-домен проекта pusya-bio-proxy на Vercel) ──
   // Если у прокси другой домен — поменяй тут и пересобери (build.py).
   var PROXY_URL = 'https://pusya-bio-proxy.vercel.app/api/bio';
+  var PB_VER = '1.6.0'; // подставляет сборщик (build.py / build_st.py)
   var CSS = "#pb-root{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}\n\n/* плавающий полупрозрачный кружок 🌸 (fixed, в родительском документе) */\n#pb-root .pb-fab{position:fixed;right:14px;bottom:92px;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:23px;line-height:1;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;border:1px solid rgba(240,168,196,0.4);background:rgba(30,20,26,0.6);color:#f0a8c4;opacity:.62;z-index:2147483000;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 4px 16px rgba(0,0,0,0.45);transition:opacity .2s,background .2s,box-shadow .2s;}\n#pb-root .pb-fab:hover{opacity:1;background:rgba(240,168,196,0.24);box-shadow:0 0 16px rgba(240,168,196,0.45);}\n#pb-root .pb-fab:active{cursor:grabbing;}\n#pb-root.open .pb-fab{opacity:1;background:rgba(240,168,196,0.28);}\n\n/* всплывающая плашка (fixed, над кружком) */\n#pb-root .pb-pop{position:fixed;right:12px;left:auto;bottom:124px;width:min(420px,calc(100vw - 24px));box-sizing:border-box;max-height:70vh;overflow:auto;z-index:2147483000;display:none;padding:11px 12px;border-radius:16px;border:1px solid rgba(240,168,196,0.3);background:rgba(18,12,16,0.98);-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);box-shadow:0 14px 44px rgba(0,0,0,0.6),0 0 18px rgba(240,168,196,0.12);animation:pb-pop-in .18s ease;}\n#pb-root.open .pb-pop{display:block;}\n@keyframes pb-pop-in{from{opacity:0;transform:translateY(8px) scale(.98);}to{opacity:1;transform:none;}}\n\n#pb-root .pb-pop-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px;}\n#pb-root .pb-tabs{display:flex;gap:3px;}\n#pb-root .pb-tab{background:none;border:none;color:#c8b0c0;font-size:15px;cursor:pointer;padding:2px 7px;border-radius:9px;opacity:.5;transition:opacity .15s,background .15s;}\n#pb-root .pb-tab:hover{opacity:.85;}\n#pb-root .pb-tab.on{opacity:1;background:rgba(240,168,196,0.18);}\n#pb-root .pb-cal-day:hover{filter:brightness(1.25);}\n#pb-root .pb-cal-act{font:inherit;font-size:10px;color:#f5d8e6;background:rgba(240,168,196,0.14);border:1px solid rgba(240,168,196,0.28);border-radius:9px;padding:5px 9px;cursor:pointer;}\n#pb-root .pb-cal-act:hover{background:rgba(240,168,196,0.24);}\n#pb-root .pb-more-btn{text-align:center;font-size:10px;color:#e6c8dc;opacity:.85;cursor:pointer;padding:7px 4px 3px;letter-spacing:.02em;user-select:none;-webkit-user-select:none;}\n#pb-root .pb-more-btn:hover{opacity:1;color:#f0d4e2;}\n#pb-root .pb-title{font-size:12px;font-weight:600;letter-spacing:.02em;color:#f5e6ef;opacity:.9;}\n#pb-root .pb-tools{display:flex;align-items:center;gap:2px;}\n#pb-root .pb-tools button{background:none;border:none;color:#f0d4e2;font-size:13px;cursor:pointer;opacity:.6;padding:2px 5px;border-radius:8px;transition:opacity .15s,transform .2s,background .15s;}\n#pb-root .pb-tools button:hover{opacity:1;background:rgba(240,168,196,0.14);}\n#pb-root .pb-refresh.spin{animation:pb-spin .9s linear infinite;opacity:1;}\n@keyframes pb-spin{to{transform:rotate(360deg);}}\n\n#pb-root .pb-cap{font-size:12px;color:#e6d4ec;opacity:.8;padding:6px 2px;animation:pb-pulse 1.3s ease-in-out infinite;}\n#pb-root .pb-err{font-size:12px;color:#f0a0b4;padding:6px 2px;line-height:1.4;}\n@keyframes pb-pulse{0%,100%{opacity:.5;}50%{opacity:1;}}\n\n#pb-root .pb-widget{max-width:420px;margin:0 auto;}\n#pb-root .pb-widget details[open] .pb-arrow{transform:rotate(180deg);}\n#pb-root .pb-widget summary::-webkit-details-marker{display:none;}\n@keyframes pb-mpulse{0%,100%{box-shadow:0 0 8px currentColor;}50%{box-shadow:0 0 18px currentColor;}}\n\n/* форма настроек */\n#pb-root .pb-form{display:flex;flex-direction:column;gap:3px;font-size:12px;color:#f0e0ea;}\n#pb-root .pb-form label{opacity:.75;margin-top:6px;}\n#pb-root .pb-i{width:100%;box-sizing:border-box;background:rgba(255,255,255,0.05);border:1px solid rgba(240,168,196,0.22);border-radius:8px;padding:7px 9px;color:#fff;font:inherit;font-size:12px;outline:none;}\n#pb-root .pb-i:focus{border-color:rgba(240,168,196,0.5);}\n#pb-root .pb-form-btns{display:flex;gap:8px;margin-top:11px;}\n#pb-root .pb-save,#pb-root .pb-cancel{border:1px solid rgba(240,168,196,0.28);background:rgba(240,168,196,0.12);color:#fbeef4;font:inherit;font-size:12px;font-weight:600;padding:7px 13px;border-radius:10px;cursor:pointer;}\n#pb-root .pb-save:hover,#pb-root .pb-cancel:hover{background:rgba(240,168,196,0.2);}\n#pb-root .pb-hint{font-size:10px;color:#cbb0c4;opacity:.7;line-height:1.35;margin-top:9px;}"; // стили инжектятся в родительский документ (build.py подставит)
   var MARKUP =
     '<button class="pb-fab" type="button" title="цикл и беременность">🌸</button>' +
@@ -126,6 +127,50 @@ try {
   function configured() { return !!(cfg.providerUrl && cfg.apiKey && cfg.model); }
   function mode() { return cfg.mode === 'omega' ? 'omega' : 'classic'; }
   function dyn() { return (cfg.dynamic === 'alpha' || cfg.dynamic === 'beta') ? cfg.dynamic : 'omega'; }
+
+  /* ── журнал диагностики: последние события/ошибки, чтобы юзер мог прислать отчёт ── */
+  var DIAG_KEY = 'pusya_bio_diag';
+  var diag = (await tavo.get(DIAG_KEY, 'global')) || [];
+  if (!Array.isArray(diag)) diag = [];
+  function redact(s) { // ключ в отчёт попасть не должен
+    s = String(s == null ? '' : s);
+    try { var k = cfg.apiKey; if (k && String(k).length > 6) s = s.split(String(k)).join('«КЛЮЧ»'); } catch (e) {}
+    return s.replace(/sk-[A-Za-z0-9_\-]{6,}/g, 'sk-«скрыт»').replace(/Bearer\s+[A-Za-z0-9_\-.]{6,}/gi, 'Bearer «скрыт»');
+  }
+  function diagPush(kind, msg) {
+    try {
+      var t = new Date(); function p2(n) { return (n < 10 ? '0' : '') + n; }
+      diag.push({ t: p2(t.getHours()) + ':' + p2(t.getMinutes()) + ':' + p2(t.getSeconds()), kind: kind, msg: redact(msg).slice(0, 600) });
+      if (diag.length > 12) diag = diag.slice(-12);
+      tavo.set(DIAG_KEY, diag, 'global');
+    } catch (e) {}
+  }
+  function diagReport() {
+    var host = '—'; try { host = String(cfg.providerUrl || '').replace(/^https?:\/\//, '').split('/')[0] || '—'; } catch (e) {}
+    var plat = 'Tavo'; try { if (typeof SillyTavern !== 'undefined') plat = 'SillyTavern'; } catch (e) {}
+    var L = [
+      '=== ОТЧЁТ · Цикл и беременность ===',
+      'версия: ' + PB_VER + '  |  платформа: ' + plat,
+      'провайдер: ' + host + '  |  модель: ' + (cfg.model || '—'),
+      'ключ задан: ' + (cfg.apiKey ? 'да' : 'НЕТ') + '  |  режим: ' + mode() + (mode() === 'omega' ? ' / ' + dyn() : ''),
+      'пересчёт раз в: ' + everyN() + '  |  влияние на РП: ' + (cfg.injectRP === false ? 'выкл' : 'вкл'),
+      'экран: ' + (pwin.innerWidth || '?') + 'x' + (pwin.innerHeight || '?'),
+      '',
+      '--- последние события (новые снизу) ---'
+    ];
+    if (!diag.length) L.push('(пусто — ещё ничего не считалось)');
+    diag.forEach(function (d) { L.push('[' + d.t + '] ' + d.kind + ': ' + d.msg); });
+    return L.join('\n');
+  }
+  async function copyText(t) {
+    try { if (pwin.navigator && pwin.navigator.clipboard) { await pwin.navigator.clipboard.writeText(t); return true; } } catch (e) {}
+    try {
+      var ta = pdoc.createElement('textarea'); ta.value = t;
+      ta.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;';
+      pdoc.body.appendChild(ta); ta.focus(); ta.select();
+      var ok = pdoc.execCommand('copy'); ta.parentNode.removeChild(ta); return !!ok;
+    } catch (e) { return false; }
+  }
 
   var charName = '';
   try { var _cc = await tavo.chat.current(); charName = (_cc && _cc.characters && _cc.characters[0] && _cc.characters[0].name) || ''; } catch (e) {}
@@ -483,12 +528,19 @@ try {
   }
 
   async function callModel(messages) {
-    var r = await fetch(PROXY_URL, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ providerUrl: cfg.providerUrl, key: cfg.apiKey, model: cfg.model, messages: messages, max_tokens: 1500, temperature: 0.7 })
-    });
+    var r;
+    try {
+      r = await fetch(PROXY_URL, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ providerUrl: cfg.providerUrl, key: cfg.apiKey, model: cfg.model, messages: messages, max_tokens: 1500, temperature: 0.7 })
+      });
+    } catch (e) { diagPush('сеть', 'не достучались до прокси: ' + ((e && e.message) || e)); throw new Error('нет связи с прокси: ' + ((e && e.message) || e)); }
     var t = await r.text(); var data; try { data = JSON.parse(t); } catch (e) { data = { content: t }; }
-    if (!r.ok) throw new Error((data && data.error ? data.error : ('прокси ' + r.status)) + (data && data.detail ? ': ' + data.detail : ''));
+    if (!r.ok) {
+      var em = (data && data.error ? data.error : ('прокси ' + r.status)) + (data && data.detail ? ': ' + data.detail : '');
+      diagPush('HTTP ' + r.status, em);
+      throw new Error(em);
+    }
     return (data && data.content) || '';
   }
 
@@ -1032,6 +1084,30 @@ try {
   }
 
   /* ── форма настроек прямо в диалоге (прокси вшит, не спрашиваем) ── */
+  /* ── экран отчёта: текст можно скопировать кнопкой или выделить вручную ── */
+  function openDiag() {
+    var rep = diagReport();
+    out.innerHTML = '<div class="pb-form">' +
+      '<label>Отчёт для разработчика (API-ключ сюда НЕ попадает)</label>' +
+      '<textarea class="pb-diag-ta" readonly style="width:100%;box-sizing:border-box;height:220px;background:rgba(255,255,255,0.05);border:1px solid rgba(240,168,196,0.22);border-radius:8px;padding:7px 9px;color:#fff;font:inherit;font-size:10px;line-height:1.35;outline:none;white-space:pre;overflow:auto;"></textarea>' +
+      '<div class="pb-form-btns"><button class="pb-diag-copy" type="button">📋 скопировать</button><button class="pb-diag-back" type="button">назад</button></div>' +
+      '<button class="pb-diag-clear" type="button" style="margin-top:9px;width:100%;border:1px solid rgba(240,168,196,0.22);background:rgba(240,168,196,0.06);color:#f0d4e2;font:inherit;font-size:11px;padding:7px 10px;border-radius:10px;cursor:pointer;">🧹 очистить журнал</button>' +
+      '<div class="pb-hint">Если кнопка «скопировать» не сработала (бывает в мобильных браузерах) — выдели текст в поле пальцем и скопируй вручную.</div></div>';
+    var ta = out.querySelector('.pb-diag-ta'); if (ta) ta.value = rep;
+    var cp = out.querySelector('.pb-diag-copy');
+    if (cp) cp.addEventListener('click', async function (e) {
+      e.stopPropagation();
+      var ok = await copyText(rep);
+      if (ok) { cp.textContent = '✓ скопировано'; toast('отчёт скопирован'); setTimeout(function () { cp.textContent = '📋 скопировать'; }, 1800); }
+      else { try { ta.focus(); ta.select(); } catch (e2) {} toast('выдели и скопируй вручную'); }
+    });
+    var bk = out.querySelector('.pb-diag-back');
+    if (bk) bk.addEventListener('click', function (e) { e.stopPropagation(); openForm(); });
+    var cl = out.querySelector('.pb-diag-clear');
+    if (cl) cl.addEventListener('click', async function (e) { e.stopPropagation(); diag = []; try { await tavo.set(DIAG_KEY, [], 'global'); } catch (e2) {} openDiag(); });
+    if (root.classList.contains('open')) placePop();
+  }
+
   function openForm() {
     out.innerHTML =
       '<div class="pb-form">' +
@@ -1046,6 +1122,7 @@ try {
       '<label style="display:flex;align-items:center;gap:7px;margin-top:8px;cursor:pointer;"><input type="checkbox" class="pb-calauto"> 📅 отслеживать игровую дату (метка в ответе, для календаря)</label>' +
       '<div class="pb-form-btns"><button class="pb-save" type="button">💾 сохранить</button><button class="pb-cancel" type="button">закрыть</button></div>' +
       '<button class="pb-reset" type="button" style="margin-top:9px;width:100%;border:1px solid rgba(240,168,196,0.22);background:rgba(240,168,196,0.06);color:#f0d4e2;font:inherit;font-size:11px;padding:7px 10px;border-radius:10px;cursor:pointer;">🔄 сбросить цикл (перечитать день из сюжета)</button>' +
+      '<button class="pb-diag" type="button" style="margin-top:7px;width:100%;border:1px solid rgba(240,168,196,0.22);background:rgba(240,168,196,0.06);color:#f0d4e2;font:inherit;font-size:11px;padding:7px 10px;border-radius:10px;cursor:pointer;">📋 отчёт об ошибке</button>' +
       '<div class="pb-hint">Прокси вшит. Ключ хранится в Tavo и уходит только на него. «Влиять на ролеплей» — состояние тихо дописывается в промпт. «Отслеживать дату» — модель в конце ответа ставит скрытую дату (её никто не видит), календарь по ней двигает день; тратит немного токенов. Сбрось цикл, если день привязался неверно.</div>' +
       '</div>';
     var injEl = out.querySelector('.pb-inject');
@@ -1068,6 +1145,8 @@ try {
     }
     var rsEl = out.querySelector('.pb-reset');
     if (rsEl) rsEl.addEventListener('click', async function (e) { e.stopPropagation(); await resetAnchor(); toast('цикл сброшен — нажми ⟳'); });
+    var dgEl = out.querySelector('.pb-diag');
+    if (dgEl) dgEl.addEventListener('click', function (e) { e.stopPropagation(); openDiag(); });
     // подставляем сохранённое и сохраняем КАЖДЫЙ ввод сразу (чтобы не терялось при
     // сворачивании приложения / перезагрузке webview, пока копируешь ключ)
     var saveT = null;
@@ -1118,12 +1197,13 @@ try {
       var messages = [{ role: 'system', content: buildSystem() }, { role: 'user', content: buildUserPrompt(cx, last && last.fields, lock, storedISO) }];
       var raw = await callModel(messages);
       // пустой ответ (частый случай у gemini: весь лимит съело «мышление» или сработали фильтры)
-      if (!String(raw || '').trim()) throw new Error('модель вернула пустой ответ. Обычно это лимит токенов (у gemini его съедает «мышление») или фильтры провайдера — попробуй другую модель-считалку.');
+      if (!String(raw || '').trim()) { diagPush('пусто', 'модель вернула пустой ответ'); throw new Error('модель вернула пустой ответ. Обычно это лимит токенов (у gemini его съедает «мышление») или фильтры провайдера — попробуй другую модель-считалку.'); }
       var f = parseBlock(raw);
-      if (!Object.keys(f).length) throw new Error('не разобрать ответ модели: ' + esc(String(raw).slice(0, 140)));
+      if (!Object.keys(f).length) { diagPush('не разобрать', String(raw).slice(0, 300)); throw new Error('не разобрать ответ модели: ' + esc(String(raw).slice(0, 140))); }
       if (!f.state) f.state = (f.pp_day != null ? 'postpartum' : f.knot != null ? 'rut' : f.slick != null ? 'heat' : f.week != null ? 'pregnancy' : f.day != null ? ((mode() === 'omega' && dyn() === 'omega') ? 'heat' : 'cycle') : 'none');
       // НЕ затираем рабочее состояние пустышкой (иначе плашка «пропадает» после одного сбойного ответа)
       if (f.state === 'none' && last && last.fields && last.fields.state && last.fields.state !== 'none') {
+        diagPush('пустышка', 'модель вернула state=none — оставили прежнее состояние');
         writeInject(last.fields);
         if (view === 'cal') renderCalendar(); else renderState(last.fields);
         return;
@@ -1134,9 +1214,11 @@ try {
       var total = await tavo.message.count();
       await tavo.set(ST_KEY, { fields: f, count: total }, 'chat');
       writeInject(f);
+      diagPush('ок', 'state=' + f.state + (f.day != null ? ' день=' + f.day : '') + (f.week != null ? ' нед=' + f.week : '') + (f.pp_day != null ? ' пп=' + f.pp_day : '') + ' дата=' + (f.date || '—'));
       if (view === 'cal') renderCalendar(); else renderState(f);
     } catch (e) {
-      if (view === 'panel') out.innerHTML = '<div class="pb-err">⚠️ ' + esc((e && e.message) || e) + '</div>';
+      diagPush('сбой', (e && e.message) || e);
+      if (view === 'panel') out.innerHTML = '<div class="pb-err">⚠️ ' + esc((e && e.message) || e) + '<div style="margin-top:7px;font-size:10px;opacity:.8;">открой ⚙ → «📋 отчёт об ошибке», чтобы скопировать подробности</div></div>';
     } finally { busy = false; if (refBtn) refBtn.classList.remove('spin'); }
   }
 
