@@ -78,8 +78,8 @@ try {
   // ── ВШИТЫЙ прокси (production-домен проекта pusya-bio-proxy на Vercel) ──
   // Если у прокси другой домен — поменяй тут и пересобери (build.py).
   var PROXY_URL = 'https://pusya-bio-proxy.spletnik-meme-worker.workers.dev';
-  var PB_VER = '1.7.0'; // подставляет сборщик (build.py / build_st.py)
-  var CSS = "#pb-root{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}\n\n/* плавающий полупрозрачный кружок 🌸 (fixed, в родительском документе) */\n#pb-root .pb-fab{position:fixed;right:14px;bottom:92px;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:23px;line-height:1;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;border:1px solid rgba(240,168,196,0.4);background:rgba(30,20,26,0.6);color:#f0a8c4;opacity:.62;z-index:2147483000;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 4px 16px rgba(0,0,0,0.45);transition:opacity .2s,background .2s,box-shadow .2s;}\n#pb-root .pb-fab:hover{opacity:1;background:rgba(240,168,196,0.24);box-shadow:0 0 16px rgba(240,168,196,0.45);}\n#pb-root .pb-fab:active{cursor:grabbing;}\n#pb-root.open .pb-fab{opacity:1;background:rgba(240,168,196,0.28);}\n\n/* всплывающая плашка (fixed, над кружком) */\n#pb-root .pb-pop{position:fixed;right:12px;left:auto;bottom:124px;width:min(420px,calc(100vw - 24px));box-sizing:border-box;max-height:70vh;overflow:auto;z-index:2147483000;display:none;padding:11px 12px;border-radius:16px;border:1px solid rgba(240,168,196,0.3);background:rgba(18,12,16,0.98);-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);box-shadow:0 14px 44px rgba(0,0,0,0.6),0 0 18px rgba(240,168,196,0.12);animation:pb-pop-in .18s ease;}\n#pb-root.open .pb-pop{display:block;}\n@keyframes pb-pop-in{from{opacity:0;transform:translateY(8px) scale(.98);}to{opacity:1;transform:none;}}\n\n#pb-root .pb-pop-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px;}\n#pb-root .pb-tabs{display:flex;gap:3px;}\n#pb-root .pb-tab{background:none;border:none;color:#c8b0c0;font-size:15px;cursor:pointer;padding:2px 7px;border-radius:9px;opacity:.5;transition:opacity .15s,background .15s;}\n#pb-root .pb-tab:hover{opacity:.85;}\n#pb-root .pb-tab.on{opacity:1;background:rgba(240,168,196,0.18);}\n#pb-root .pb-cal-day:hover{filter:brightness(1.25);}\n#pb-root .pb-cal-act{font:inherit;font-size:10px;color:#f5d8e6;background:rgba(240,168,196,0.14);border:1px solid rgba(240,168,196,0.28);border-radius:9px;padding:5px 9px;cursor:pointer;}\n#pb-root .pb-cal-act:hover{background:rgba(240,168,196,0.24);}\n#pb-root .pb-more-btn{text-align:center;font-size:10px;color:#e6c8dc;opacity:.85;cursor:pointer;padding:7px 4px 3px;letter-spacing:.02em;user-select:none;-webkit-user-select:none;}\n#pb-root .pb-more-btn:hover{opacity:1;color:#f0d4e2;}\n#pb-root .pb-title{font-size:12px;font-weight:600;letter-spacing:.02em;color:#f5e6ef;opacity:.9;}\n#pb-root .pb-tools{display:flex;align-items:center;gap:2px;}\n#pb-root .pb-tools button{background:none;border:none;color:#f0d4e2;font-size:13px;cursor:pointer;opacity:.6;padding:2px 5px;border-radius:8px;transition:opacity .15s,transform .2s,background .15s;}\n#pb-root .pb-tools button:hover{opacity:1;background:rgba(240,168,196,0.14);}\n#pb-root .pb-refresh.spin{animation:pb-spin .9s linear infinite;opacity:1;}\n@keyframes pb-spin{to{transform:rotate(360deg);}}\n\n#pb-root .pb-cap{font-size:12px;color:#e6d4ec;opacity:.8;padding:6px 2px;animation:pb-pulse 1.3s ease-in-out infinite;}\n#pb-root .pb-err{font-size:12px;color:#f0a0b4;padding:6px 2px;line-height:1.4;}\n@keyframes pb-pulse{0%,100%{opacity:.5;}50%{opacity:1;}}\n\n#pb-root .pb-widget{max-width:420px;margin:0 auto;}\n#pb-root .pb-widget details[open] .pb-arrow{transform:rotate(180deg);}\n#pb-root .pb-widget summary::-webkit-details-marker{display:none;}\n@keyframes pb-mpulse{0%,100%{box-shadow:0 0 8px currentColor;}50%{box-shadow:0 0 18px currentColor;}}\n\n/* форма настроек */\n#pb-root .pb-form{display:flex;flex-direction:column;gap:3px;font-size:12px;color:#f0e0ea;}\n#pb-root .pb-form label{opacity:.75;margin-top:6px;}\n#pb-root .pb-i{width:100%;box-sizing:border-box;background:rgba(255,255,255,0.05);border:1px solid rgba(240,168,196,0.22);border-radius:8px;padding:7px 9px;color:#fff;font:inherit;font-size:12px;outline:none;}\n#pb-root .pb-i:focus{border-color:rgba(240,168,196,0.5);}\n#pb-root .pb-form-btns{display:flex;gap:8px;margin-top:11px;}\n#pb-root .pb-save,#pb-root .pb-cancel{border:1px solid rgba(240,168,196,0.28);background:rgba(240,168,196,0.12);color:#fbeef4;font:inherit;font-size:12px;font-weight:600;padding:7px 13px;border-radius:10px;cursor:pointer;}\n#pb-root .pb-save:hover,#pb-root .pb-cancel:hover{background:rgba(240,168,196,0.2);}\n#pb-root .pb-hint{font-size:10px;color:#cbb0c4;opacity:.7;line-height:1.35;margin-top:9px;}"; // стили инжектятся в родительский документ (build.py подставит)
+  var PB_VER = '1.8.0'; // подставляет сборщик (build.py / build_st.py)
+  var CSS = "/* ── палитра тем: тёмная (по умолчанию), светлая, прозрачная ──\n   Нейтральные тона вынесены в переменные, потому что виджеты рисуются инлайн-стилями,\n   а var() в инлайн-стилях работает. Акцентные цвета фаз намеренно не темизируются. */\n#pb-root{\n  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;\n  --pb-t1:#fbeef7; --pb-t2:#e6d4ec; --pb-t3:#cbb0d4; --pb-t4:#a890b0;\n  --pb-card:linear-gradient(150deg,rgba(40,28,42,0.34),rgba(28,20,32,0.22));\n  --pb-pop-bg:rgba(18,12,16,0.98);\n  --pb-pop-br:rgba(240,168,196,0.3);\n  --pb-input-bg:rgba(255,255,255,0.05);\n  --pb-fab-bg:rgba(30,20,26,0.6);\n  --pb-fab-fg:#f0a8c4; --pb-accent:#f0a8c4;\n  --pb-shadow:0 14px 44px rgba(0,0,0,0.6),0 0 18px rgba(240,168,196,0.12);\n  --pb-blur:blur(22px) saturate(160%);\n  --pb-c-blue:#8ab4e0; --pb-c-calm:#96aad6; --pb-c-amber:#f0c078; --pb-c-amber2:#f0b070; --pb-c-amber3:#f4c496; --pb-c-green:#86dca6; --pb-c-green2:#96d6b6; --pb-c-pink:#ee7e96; --pb-c-hot:#f25c84; --pb-c-heat:#e85a82; --pb-c-mens:#f08c92; --pb-c-rut:#c85050; --pb-c-ovu:#d68ce0; --pb-c-after:#c696d2; --pb-c-fade:#aa96c8; --pb-c-tri3:#f4b0c8; --pb-c-pp:#e0607a; --pb-c-due:#e85a6e;\n}\n#pb-root.pb-theme-light{\n  --pb-t1:#3d2b36; --pb-t2:#543d4b; --pb-t3:#7b6473; --pb-t4:#9d8794;\n  --pb-card:linear-gradient(150deg,rgba(255,255,255,0.78),rgba(255,244,249,0.55));\n  --pb-pop-bg:rgba(253,246,249,0.985);\n  --pb-pop-br:rgba(198,138,166,0.38);\n  --pb-input-bg:rgba(0,0,0,0.045);\n  --pb-fab-bg:rgba(255,250,252,0.88);\n  --pb-fab-fg:#c2557f; --pb-accent:#c2557f;\n  --pb-shadow:0 14px 44px rgba(120,80,100,0.22),0 0 18px rgba(198,138,166,0.16);\n  --pb-c-blue:#3f74ad; --pb-c-calm:#4a6aa8; --pb-c-amber:#9a6407; --pb-c-amber2:#99630a; --pb-c-amber3:#98651f; --pb-c-green:#2c8551; --pb-c-green2:#2f8560; --pb-c-pink:#c04a67; --pb-c-hot:#cf2f5e; --pb-c-heat:#c33a63; --pb-c-mens:#bf4650; --pb-c-rut:#a83535; --pb-c-ovu:#9a4fa8; --pb-c-after:#8e56a0; --pb-c-fade:#6d5a92; --pb-c-tri3:#b8577f; --pb-c-pp:#b83b57; --pb-c-due:#c3384c;\n}\n#pb-root.pb-theme-glass{\n  --pb-t1:#fff8fc; --pb-t2:#f2e6ee; --pb-t3:#ddcad8; --pb-t4:#bfaaba;\n  --pb-card:linear-gradient(150deg,rgba(255,255,255,0.12),rgba(255,255,255,0.04));\n  --pb-pop-bg:rgba(28,20,26,0.42);\n  --pb-pop-br:rgba(255,255,255,0.24);\n  --pb-input-bg:rgba(255,255,255,0.12);\n  --pb-fab-bg:rgba(40,28,36,0.34);\n  --pb-fab-fg:#ffd9e8; --pb-accent:#ffd9e8;\n  --pb-shadow:0 14px 44px rgba(0,0,0,0.4);\n  --pb-blur:blur(26px) saturate(150%);\n}\n\n/* плавающий полупрозрачный кружок 🌸 (fixed, в родительском документе) */\n#pb-root .pb-fab{position:fixed;right:14px;bottom:92px;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:23px;line-height:1;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;border:1px solid rgba(240,168,196,0.4);background:var(--pb-fab-bg);color:var(--pb-fab-fg);opacity:.62;z-index:2147483000;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 4px 16px rgba(0,0,0,0.45);transition:opacity .2s,background .2s,box-shadow .2s;}\n#pb-root .pb-fab:hover{opacity:1;background:rgba(240,168,196,0.24);box-shadow:0 0 16px rgba(240,168,196,0.45);}\n#pb-root .pb-fab:active{cursor:grabbing;}\n#pb-root.open .pb-fab{opacity:1;background:rgba(240,168,196,0.28);}\n\n/* всплывающая плашка (fixed, над кружком) */\n#pb-root .pb-pop{position:fixed;right:12px;left:auto;bottom:124px;width:min(420px,calc(100vw - 24px));box-sizing:border-box;max-height:70vh;overflow:auto;z-index:2147483000;display:none;padding:11px 12px;border-radius:16px;border:1px solid var(--pb-pop-br);background:var(--pb-pop-bg);-webkit-backdrop-filter:var(--pb-blur);backdrop-filter:var(--pb-blur);box-shadow:var(--pb-shadow);animation:pb-pop-in .18s ease;}\n#pb-root.open .pb-pop{display:block;}\n@keyframes pb-pop-in{from{opacity:0;transform:translateY(8px) scale(.98);}to{opacity:1;transform:none;}}\n\n#pb-root .pb-pop-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px;}\n#pb-root .pb-tabs{display:flex;gap:3px;}\n#pb-root .pb-tab{background:none;border:none;color:var(--pb-t3);font-size:15px;cursor:pointer;padding:2px 7px;border-radius:9px;opacity:.5;transition:opacity .15s,background .15s;}\n#pb-root .pb-tab:hover{opacity:.85;}\n#pb-root .pb-tab.on{opacity:1;background:rgba(240,168,196,0.18);}\n#pb-root .pb-cal-day:hover{filter:brightness(1.25);}\n#pb-root.pb-theme-light .pb-cal-day:hover{filter:brightness(0.94);}\n#pb-root .pb-cal-act{font:inherit;font-size:10px;color:var(--pb-t2);background:rgba(240,168,196,0.14);border:1px solid rgba(240,168,196,0.28);border-radius:9px;padding:5px 9px;cursor:pointer;}\n#pb-root .pb-cal-act:hover{background:rgba(240,168,196,0.24);}\n#pb-root .pb-more-btn{text-align:center;font-size:10px;color:var(--pb-t2);opacity:.85;cursor:pointer;padding:7px 4px 3px;letter-spacing:.02em;user-select:none;-webkit-user-select:none;}\n#pb-root .pb-more-btn:hover{opacity:1;}\n#pb-root .pb-title{font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--pb-t1);opacity:.9;}\n#pb-root .pb-tools{display:flex;align-items:center;gap:2px;}\n#pb-root .pb-tools button{background:none;border:none;color:var(--pb-t2);font-size:13px;cursor:pointer;opacity:.6;padding:2px 5px;border-radius:8px;transition:opacity .15s,transform .2s,background .15s;}\n#pb-root .pb-tools button:hover{opacity:1;background:rgba(240,168,196,0.14);}\n#pb-root .pb-refresh.spin{animation:pb-spin .9s linear infinite;opacity:1;}\n@keyframes pb-spin{to{transform:rotate(360deg);}}\n\n#pb-root .pb-cap{font-size:12px;color:var(--pb-t2);opacity:.8;padding:6px 2px;animation:pb-pulse 1.3s ease-in-out infinite;}\n#pb-root .pb-err{font-size:12px;color:#f0a0b4;padding:6px 2px;line-height:1.4;}\n#pb-root.pb-theme-light .pb-err{color:#c0405e;}\n@keyframes pb-pulse{0%,100%{opacity:.5;}50%{opacity:1;}}\n\n#pb-root .pb-widget{max-width:420px;margin:0 auto;}\n#pb-root .pb-widget details[open] .pb-arrow{transform:rotate(180deg);}\n#pb-root .pb-widget summary::-webkit-details-marker{display:none;}\n@keyframes pb-mpulse{0%,100%{box-shadow:0 0 8px currentColor;}50%{box-shadow:0 0 18px currentColor;}}\n\n/* форма настроек */\n#pb-root .pb-form{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--pb-t2);}\n#pb-root .pb-form label{opacity:.75;margin-top:6px;}\n#pb-root .pb-i{width:100%;box-sizing:border-box;background:var(--pb-input-bg);border:1px solid rgba(240,168,196,0.22);border-radius:8px;padding:7px 9px;color:var(--pb-t1);font:inherit;font-size:12px;outline:none;}\n#pb-root .pb-i:focus{border-color:rgba(240,168,196,0.5);}\n#pb-root .pb-form-btns{display:flex;gap:8px;margin-top:11px;}\n#pb-root .pb-save,#pb-root .pb-cancel{border:1px solid rgba(240,168,196,0.28);background:rgba(240,168,196,0.12);color:var(--pb-t1);font:inherit;font-size:12px;font-weight:600;padding:7px 13px;border-radius:10px;cursor:pointer;}\n#pb-root .pb-save:hover,#pb-root .pb-cancel:hover{background:rgba(240,168,196,0.2);}\n#pb-root .pb-hint{font-size:10px;color:var(--pb-t3);opacity:.7;line-height:1.35;margin-top:9px;}\n\n/* переключатель темы (сегментированный) */\n#pb-root .pb-themes{display:flex;gap:5px;margin-top:4px;}\n#pb-root .pb-th{flex:1;display:flex;align-items:center;justify-content:center;gap:4px;font:inherit;font-size:11px;color:var(--pb-t2);background:var(--pb-input-bg);border:1px solid rgba(240,168,196,0.22);border-radius:10px;padding:7px 6px;cursor:pointer;transition:background .15s,border-color .15s;}\n#pb-root .pb-th:hover{background:rgba(240,168,196,0.14);}\n#pb-root .pb-th.on{background:rgba(240,168,196,0.2);border-color:rgba(240,168,196,0.55);color:var(--pb-t1);font-weight:600;}"; // стили инжектятся в родительский документ (build.py подставит)
   var MARKUP =
     '<button class="pb-fab" type="button" title="цикл и беременность">🌸</button>' +
     '<div class="pb-pop">' +
@@ -113,7 +113,7 @@ try {
   var closeBtn = root.querySelector('.pb-close');
   // критичные стили кружка инлайном + !important — чтобы был виден даже если внешний CSS не подхватился/перекрыт (мобильные)
   try {
-    fab.style.cssText += ';right:14px;bottom:92px;width:44px;height:44px;border-radius:50%;align-items:center;justify-content:center;font-size:23px;line-height:1;background:rgba(30,20,26,0.82);color:#f0a8c4;border:1px solid rgba(240,168,196,0.5);cursor:grab;touch-action:none;';
+    fab.style.cssText += ';right:14px;bottom:92px;width:44px;height:44px;border-radius:50%;align-items:center;justify-content:center;font-size:23px;line-height:1;background:var(--pb-fab-bg,rgba(30,20,26,0.82));color:var(--pb-fab-fg,#f0a8c4);border:1px solid rgba(240,168,196,0.5);cursor:grab;touch-action:none;';
     fab.style.setProperty('position', 'fixed', 'important');
     fab.style.setProperty('display', 'flex', 'important');
     fab.style.setProperty('visibility', 'visible', 'important');
@@ -127,6 +127,14 @@ try {
   function configured() { return !!(cfg.providerUrl && cfg.apiKey && cfg.model); }
   function mode() { return cfg.mode === 'omega' ? 'omega' : 'classic'; }
   function dyn() { return (cfg.dynamic === 'alpha' || cfg.dynamic === 'beta') ? cfg.dynamic : 'omega'; }
+  function theme() { return (cfg.theme === 'light' || cfg.theme === 'glass') ? cfg.theme : 'dark'; }
+  function applyTheme() {
+    try {
+      root.classList.remove('pb-theme-light', 'pb-theme-glass');
+      var t = theme(); if (t !== 'dark') root.classList.add('pb-theme-' + t);
+    } catch (e) {}
+  }
+  applyTheme();
 
   /* ── журнал диагностики: последние события/ошибки, чтобы юзер мог прислать отчёт ── */
   var DIAG_KEY = 'pusya_bio_diag';
@@ -179,17 +187,17 @@ try {
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   function num(v, d) { var n = parseInt(v, 10); return isNaN(n) ? d : n; }
 
-  function energyColorOf(e) { return e === 'Низкая' ? '#8ab4e0' : e === 'Умеренная' ? '#f0c078' : e === 'Высокая' ? '#ee7e96' : '#f25c84'; }
-  function softRow(icon, color, text) { return text ? '<div style="margin-bottom:7px;font-size:8.5px;color:#cdb6d6;line-height:1.4;"><span style="color:' + color + ';">' + icon + '</span> ' + esc(text) + '</div>' : ''; }
-  function careTipRow(text) { return text ? '<div style="margin-bottom:7px;"><div style="background:rgba(var(--ac),0.09);border-radius:10px;padding:8px 10px;border:1px solid rgba(var(--ac),0.16);"><div style="font-size:9px;color:#f0e0ea;line-height:1.4;"><span style="color:#f0a8c4;">🤍 рядом:</span> ' + esc(text) + '</div></div></div>' : ''; }
+  function energyColorOf(e) { return e === 'Низкая' ? 'var(--pb-c-blue)' : e === 'Умеренная' ? 'var(--pb-c-amber)' : e === 'Высокая' ? 'var(--pb-c-pink)' : 'var(--pb-c-hot)'; }
+  function softRow(icon, color, text) { return text ? '<div style="margin-bottom:7px;font-size:8.5px;color:var(--pb-t3);line-height:1.4;"><span style="color:' + color + ';">' + icon + '</span> ' + esc(text) + '</div>' : ''; }
+  function careTipRow(text) { return text ? '<div style="margin-bottom:7px;"><div style="background:rgba(var(--ac),0.09);border-radius:10px;padding:8px 10px;border:1px solid rgba(var(--ac),0.16);"><div style="font-size:9px;color:var(--pb-t2);line-height:1.4;"><span style="color:var(--pb-accent,#f0a8c4);">🤍 рядом:</span> ' + esc(text) + '</div></div></div>' : ''; }
   var moreOpen = false; // детали свёрнуты по умолчанию
   function moreBlock(inner) {
     if (!inner || !inner.replace(/\s/g, '')) return '';
     return '<div class="pb-more-btn">' + (moreOpen ? '− свернуть' : '＋ подробнее') + '</div><div class="pb-more" style="' + (moreOpen ? '' : 'display:none;') + '">' + inner + '</div>';
   }
-  function colorLevel(pct) { var n = num(pct, 0); return n >= 80 ? '#f25c84' : n >= 55 ? '#ee7e96' : n >= 30 ? '#f0c078' : '#8ab4e0'; }
-  function insightRow(t) { return t ? '<div style="margin-bottom:7px;"><div style="background:rgba(var(--ac),0.07);border-radius:10px;padding:8px 10px;border:1px solid rgba(var(--ac),0.14);"><div style="font-size:9px;color:#e6d4ec;line-height:1.45;font-style:italic;">🧠 ' + esc(t) + '</div></div></div>' : ''; }
-  function footRow(mood) { if (!mood) return ''; return '<div style="display:flex;align-items:center;gap:8px;padding-top:7px;margin-top:7px;border-top:1px solid rgba(var(--ac),0.12);"><span style="font-size:7.5px;color:#a890b0;">влияние:</span><span style="background:rgba(var(--ac),0.12);padding:3px 8px;border-radius:11px;font-size:9px;color:#e6d4ec;">' + esc(String(mood).replace(/[\[\]]/g, '')) + '</span></div>'; }
+  function colorLevel(pct) { var n = num(pct, 0); return n >= 80 ? 'var(--pb-c-hot)' : n >= 55 ? 'var(--pb-c-pink)' : n >= 30 ? 'var(--pb-c-amber)' : 'var(--pb-c-blue)'; }
+  function insightRow(t) { return t ? '<div style="margin-bottom:7px;"><div style="background:rgba(var(--ac),0.07);border-radius:10px;padding:8px 10px;border:1px solid rgba(var(--ac),0.14);"><div style="font-size:9px;color:var(--pb-t2);line-height:1.45;font-style:italic;">🧠 ' + esc(t) + '</div></div></div>' : ''; }
+  function footRow(mood) { if (!mood) return ''; return '<div style="display:flex;align-items:center;gap:8px;padding-top:7px;margin-top:7px;border-top:1px solid rgba(var(--ac),0.12);"><span style="font-size:7.5px;color:var(--pb-t4);">влияние:</span><span style="background:rgba(var(--ac),0.12);padding:3px 8px;border-radius:11px;font-size:9px;color:var(--pb-t2);">' + esc(String(mood).replace(/[\[\]]/g, '')) + '</span></div>'; }
 
   // общий рендер фазовой плашки (для течки/гона)
   function phaseWidget(o) {
@@ -198,16 +206,16 @@ try {
     o.segs.forEach(function (s) {
       var w = Math.max(0, (s[2] - s[1]) * 100), pc = o.PH[s[0]], on = (s[0] === o.phase);
       th += '<div style="width:' + w + '%;height:100%;background:rgba(' + pc[0] + ',' + (on ? 0.95 : 0.4) + ');box-shadow:' + (on ? '0 0 10px rgba(' + pc[0] + ',0.9)' : 'none') + ';"></div>';
-      lb += '<span style="width:' + w + '%;text-align:center;color:' + (on ? pc[2] : '#8c7894') + ';opacity:' + (on ? 1 : 0.6) + ';">' + pc[3] + '</span>';
+      lb += '<span style="width:' + w + '%;text-align:center;color:' + (on ? pc[2] : 'var(--pb-t4)') + ';opacity:' + (on ? 1 : 0.6) + ';">' + pc[3] + '</span>';
     });
     var pos = Math.max(0, Math.min(100, o.markerFrac * 100));
-    var cells = o.cells.map(function (c) { return '<div style="flex:1;min-width:0;background:rgba(var(--ac),0.08);border-radius:10px;padding:7px 3px;text-align:center;border:1px solid rgba(var(--ac),0.14);"><div style="font-size:6.5px;color:#c4acce;margin-bottom:2px;">' + c[0] + ' ' + c[1] + '</div><div style="font-size:8px;font-weight:700;color:' + c[3] + ';line-height:1.15;">' + esc(c[2]) + '</div></div>'; }).join('');
+    var cells = o.cells.map(function (c) { return '<div style="flex:1;min-width:0;background:rgba(var(--ac),0.08);border-radius:10px;padding:7px 3px;text-align:center;border:1px solid rgba(var(--ac),0.14);"><div style="font-size:6.5px;color:var(--pb-t3);margin-bottom:2px;">' + c[0] + ' ' + c[1] + '</div><div style="font-size:8px;font-weight:700;color:' + c[3] + ';line-height:1.15;">' + esc(c[2]) + '</div></div>'; }).join('');
     return '<div class="pb-widget" style="--ac:' + p[0] + ';--hex:' + p[2] + ';--soft:' + p[1] + ';">' +
-      '<details open class="pbc" style="border-radius:22px;overflow:hidden;position:relative;background:linear-gradient(150deg,rgba(40,28,42,0.34),rgba(28,20,32,0.22));border:1px solid rgba(var(--ac),0.28);box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 22px rgba(var(--ac),0.14),inset 0 1px 0 rgba(255,255,255,0.09);">' +
+      '<details open class="pbc" style="border-radius:22px;overflow:hidden;position:relative;background:var(--pb-card);border:1px solid rgba(var(--ac),0.28);box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 22px rgba(var(--ac),0.14),inset 0 1px 0 rgba(255,255,255,0.09);">' +
       '<div style="position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(130% 100% at 100% 0%, rgba(var(--ac),0.32), transparent 60%);"></div>' +
       '<summary style="cursor:pointer;list-style:none;outline:none;position:relative;z-index:4;"><div style="padding:12px 15px;display:flex;align-items:center;gap:11px;border-bottom:1px solid rgba(var(--ac),0.14);">' +
       '<div style="width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 32% 28%,rgba(var(--ac),0.5),rgba(var(--ac),0.12));display:flex;align-items:center;justify-content:center;font-size:16px;border:1px solid rgba(var(--ac),0.45);box-shadow:0 0 16px rgba(var(--ac),0.45);flex-shrink:0;">' + p[3] + '</div>' +
-      '<div style="flex:1;min-width:0;"><div style="font-size:10px;font-weight:700;color:#fbeef7;">' + o.title + '</div><div style="display:flex;align-items:center;gap:6px;margin-top:2px;"><span style="font-size:8px;font-weight:700;color:' + p[2] + ';">' + esc(o.phase) + '</span><span style="font-size:8px;color:#cbb0d4;">' + o.sub + '</span></div></div>' +
+      '<div style="flex:1;min-width:0;"><div style="font-size:10px;font-weight:700;color:var(--pb-t1);">' + o.title + '</div><div style="display:flex;align-items:center;gap:6px;margin-top:2px;"><span style="font-size:8px;font-weight:700;color:' + p[2] + ';">' + esc(o.phase) + '</span><span style="font-size:8px;color:var(--pb-t3);">' + o.sub + '</span></div></div>' +
       '<span class="pb-arrow" style="font-size:10px;color:' + p[2] + ';transition:transform .3s;flex-shrink:0;">▼</span></div></summary>' +
       '<div style="padding:14px 16px 11px;position:relative;z-index:4;">' +
       '<div style="position:relative;height:30px;margin-bottom:5px;"><div style="position:absolute;left:0;right:0;top:11px;height:6px;border-radius:6px;overflow:hidden;display:flex;box-shadow:0 0 12px rgba(var(--ac),0.3);">' + th + '</div>' +
@@ -274,15 +282,15 @@ try {
 
   function heatHtml(f) {
     deriveHeat(f);
-    var PH = { 'Покой': ['150,170,214', '188,200,234', '#96aad6', '🌙'], 'Предтечка': ['236,176,108', '248,206,158', '#f0b070', '🌡'], 'Течка': ['232,90,130', '244,150,180', '#e85a82', '🔥'], 'Послетечка': ['198,150,210', '230,190,230', '#c696d2', '💗'] };
+    var PH = { 'Покой': ['150,170,214', '188,200,234', 'var(--pb-c-calm)', '🌙'], 'Предтечка': ['236,176,108', '248,206,158', 'var(--pb-c-amber2)', '🌡'], 'Течка': ['232,90,130', '244,150,180', 'var(--pb-c-heat)', '🔥'], 'Послетечка': ['198,150,210', '230,190,230', 'var(--pb-c-after)', '💗'] };
     var rows = [];
-    if (f.nesting && f.nesting !== '—') rows.push(softRow('🪺 гнездо:', '#e85a82', f.nesting));
-    if (f.symptoms) rows.push(softRow('●', '#e85a82', f.symptoms));
-    if (f.bond) rows.push(softRow('🔗 связь:', '#e85a82', f.bond + (f.suppressants === 'Да' ? ' · на супрессантах' : '')));
-    if (f.cravings) rows.push(softRow('🍫 хочется:', '#e85a82', f.cravings));
-    if (f.fact) rows.push(softRow('✨', '#e85a82', f.fact));
-    if (f.avoid) rows.push(softRow('⚠️ избегать:', '#e85a82', f.avoid));
-    if (f.selfcare) rows.push(softRow('🛁 поможет:', '#e85a82', f.selfcare));
+    if (f.nesting && f.nesting !== '—') rows.push(softRow('🪺 гнездо:', 'var(--pb-c-heat)', f.nesting));
+    if (f.symptoms) rows.push(softRow('●', 'var(--pb-c-heat)', f.symptoms));
+    if (f.bond) rows.push(softRow('🔗 связь:', 'var(--pb-c-heat)', f.bond + (f.suppressants === 'Да' ? ' · на супрессантах' : '')));
+    if (f.cravings) rows.push(softRow('🍫 хочется:', 'var(--pb-c-heat)', f.cravings));
+    if (f.fact) rows.push(softRow('✨', 'var(--pb-c-heat)', f.fact));
+    if (f.avoid) rows.push(softRow('⚠️ избегать:', 'var(--pb-c-heat)', f.avoid));
+    if (f.selfcare) rows.push(softRow('🛁 поможет:', 'var(--pb-c-heat)', f.selfcare));
     if (f.care_tip) rows.push(careTipRow(f.care_tip));
     if (f.insight) rows.push(insightRow(f.insight));
     return phaseWidget({
@@ -295,16 +303,16 @@ try {
   }
   function rutHtml(f) {
     deriveRut(f);
-    var PH = { 'Покой': ['150,170,214', '188,200,234', '#96aad6', '🌙'], 'Предгон': ['236,176,108', '248,206,158', '#f0b070', '⚡'], 'Гон': ['200,80,80', '236,140,140', '#c85050', '🐺'], 'Спад': ['170,150,200', '210,190,230', '#aa96c8', '🌫'] };
+    var PH = { 'Покой': ['150,170,214', '188,200,234', 'var(--pb-c-calm)', '🌙'], 'Предгон': ['236,176,108', '248,206,158', 'var(--pb-c-amber2)', '⚡'], 'Гон': ['200,80,80', '236,140,140', 'var(--pb-c-rut)', '🐺'], 'Спад': ['170,150,200', '210,190,230', 'var(--pb-c-fade)', '🌫'] };
     var rows = [];
-    if (f.symptoms) rows.push(softRow('●', '#c85050', f.symptoms));
-    if (f.bond) rows.push(softRow('🔗 связь:', '#c85050', f.bond + (f.suppressants === 'Да' ? ' · на супрессантах' : '')));
-    if (f.fact) rows.push(softRow('✨', '#c85050', f.fact));
-    if (f.avoid) rows.push(softRow('⚠️ избегать:', '#c85050', f.avoid));
-    if (f.selfcare) rows.push(softRow('🛁 поможет:', '#c85050', f.selfcare));
+    if (f.symptoms) rows.push(softRow('●', 'var(--pb-c-rut)', f.symptoms));
+    if (f.bond) rows.push(softRow('🔗 связь:', 'var(--pb-c-rut)', f.bond + (f.suppressants === 'Да' ? ' · на супрессантах' : '')));
+    if (f.fact) rows.push(softRow('✨', 'var(--pb-c-rut)', f.fact));
+    if (f.avoid) rows.push(softRow('⚠️ избегать:', 'var(--pb-c-rut)', f.avoid));
+    if (f.selfcare) rows.push(softRow('🛁 поможет:', 'var(--pb-c-rut)', f.selfcare));
     if (f.care_tip) rows.push(careTipRow(f.care_tip));
     if (f.insight) rows.push(insightRow(f.insight));
-    var trigC = f.trigger === 'Сильный' ? '#f25c84' : f.trigger === 'Слабый' ? '#f0c078' : '#8ab4e0';
+    var trigC = f.trigger === 'Сильный' ? 'var(--pb-c-hot)' : f.trigger === 'Слабый' ? 'var(--pb-c-amber)' : 'var(--pb-c-blue)';
     return phaseWidget({
       title: 'Цикл гона · День ' + esc(f.day), sub: '· ' + esc(f.days_until_next) + ' дн до след.', PH: PH, phase: f.phase,
       segs: [['Покой', 0, 0.6], ['Предгон', 0.6, 0.72], ['Гон', 0.72, 0.88], ['Спад', 0.88, 1]],
@@ -667,10 +675,10 @@ try {
   function cycleHtml(f) {
     deriveCycle(f);
     var PH = {
-      'Менструальная': ['232,108,116', '244,150,156', '#f08c92', '🩸'],
-      'Фолликулярная': ['120,200,156', '170,228,190', '#86dca6', '🌱'],
-      'Овуляция': ['198,124,210', '236,176,236', '#d68ce0', '💜'],
-      'Лютеиновая': ['236,176,108', '248,206,158', '#f0b070', '🌙']
+      'Менструальная': ['232,108,116', '244,150,156', 'var(--pb-c-mens)', '🩸'],
+      'Фолликулярная': ['120,200,156', '170,228,190', 'var(--pb-c-green)', '🌱'],
+      'Овуляция': ['198,124,210', '236,176,236', 'var(--pb-c-ovu)', '💜'],
+      'Лютеиновая': ['236,176,108', '248,206,158', 'var(--pb-c-amber2)', '🌙']
     };
     var phase = f.phase, p = PH[phase] || PH['Овуляция'];
     var day = f.day, length = f.length, ovDay = length - 14, next = f.days_until_next, ovu = f.days_until_ovulation;
@@ -680,26 +688,26 @@ try {
     segs.forEach(function (s) {
       var w = Math.max(0, (s[2] - s[1]) / length * 100), c = PH[s[0]][0], on = (s[0] === phase);
       th += '<div style="width:' + w + '%;height:100%;background:rgba(' + c + ',' + (on ? 0.95 : 0.4) + ');box-shadow:' + (on ? '0 0 10px rgba(' + c + ',0.9)' : 'none') + ';"></div>';
-      lb += '<span style="width:' + w + '%;text-align:center;color:' + (on ? PH[s[0]][2] : '#8c7894') + ';opacity:' + (on ? 1 : 0.6) + ';">' + PH[s[0]][3] + '</span>';
+      lb += '<span style="width:' + w + '%;text-align:center;color:' + (on ? PH[s[0]][2] : 'var(--pb-t4)') + ';opacity:' + (on ? 1 : 0.6) + ';">' + PH[s[0]][3] + '</span>';
     });
     var pos = Math.max(0, Math.min(100, (day / length) * 100));
-    var fertColor = fert === 'Низкая' ? '#8ab4e0' : fert === 'Средняя' ? '#f0c078' : '#ee7e96';
-    var libColor = lib === 'Низкое' ? '#8ab4e0' : lib === 'Умеренное' ? '#f0c078' : lib === 'Высокое' ? '#ee7e96' : '#f25c84';
-    var riskColor = risk === 'Низкий' ? '#86dca6' : risk === 'Средний' ? '#f0c078' : risk === 'Высокий' ? '#ee7e96' : '#f25c84';
-    function cell(ic, label, val, col) { return '<div style="flex:1;min-width:0;background:rgba(var(--ac),0.08);border-radius:10px;padding:7px 3px;text-align:center;border:1px solid rgba(var(--ac),0.14);"><div style="font-size:6.5px;color:#c4acce;margin-bottom:2px;">' + ic + ' ' + label + '</div><div style="font-size:8px;font-weight:700;color:' + col + ';line-height:1.15;">' + esc(val) + '</div></div>'; }
+    var fertColor = fert === 'Низкая' ? 'var(--pb-c-blue)' : fert === 'Средняя' ? 'var(--pb-c-amber)' : 'var(--pb-c-pink)';
+    var libColor = lib === 'Низкое' ? 'var(--pb-c-blue)' : lib === 'Умеренное' ? 'var(--pb-c-amber)' : lib === 'Высокое' ? 'var(--pb-c-pink)' : 'var(--pb-c-hot)';
+    var riskColor = risk === 'Низкий' ? 'var(--pb-c-green)' : risk === 'Средний' ? 'var(--pb-c-amber)' : risk === 'Высокий' ? 'var(--pb-c-pink)' : 'var(--pb-c-hot)';
+    function cell(ic, label, val, col) { return '<div style="flex:1;min-width:0;background:rgba(var(--ac),0.08);border-radius:10px;padding:7px 3px;text-align:center;border:1px solid rgba(var(--ac),0.14);"><div style="font-size:6.5px;color:var(--pb-t3);margin-bottom:2px;">' + ic + ' ' + label + '</div><div style="font-size:8px;font-weight:700;color:' + col + ';line-height:1.15;">' + esc(val) + '</div></div>'; }
     var symp = f.symptoms, ins = f.insight, mood = f.moodlet, chem = f.chemistry_boost;
-    var sympH = symp ? '<div style="margin-bottom:7px;font-size:8.5px;color:#cdb6d6;line-height:1.4;"><span style="color:' + p[2] + ';">●</span> ' + esc(symp) + '</div>' : '';
+    var sympH = symp ? '<div style="margin-bottom:7px;font-size:8.5px;color:var(--pb-t3);line-height:1.4;"><span style="color:' + p[2] + ';">●</span> ' + esc(symp) + '</div>' : '';
     var cravH = softRow('🍫 хочется:', p[2], f.cravings);
     var factH = softRow('✨', p[2], f.fact);
     var careH = careTipRow(f.care_tip);
-    var insH = ins ? '<div style="margin-bottom:7px;"><div style="background:rgba(var(--ac),0.07);border-radius:10px;padding:8px 10px;border:1px solid rgba(var(--ac),0.14);"><div style="font-size:9px;color:#e6d4ec;line-height:1.45;font-style:italic;">🧠 ' + esc(ins) + '</div></div></div>' : '';
-    var foot = (mood || chem) ? '<div style="display:flex;align-items:center;gap:8px;padding-top:7px;margin-top:7px;border-top:1px solid rgba(var(--ac),0.12);"><span style="font-size:7.5px;color:#a890b0;">влияние:</span>' + (mood ? '<span style="background:rgba(var(--ac),0.12);padding:3px 8px;border-radius:11px;font-size:9px;color:#e6d4ec;">' + esc(String(mood).replace(/[\[\]]/g, '')) + '</span>' : '') + (chem ? '<span style="font-size:8px;color:#86dca6;">химия ' + esc(chem) + '</span>' : '') + '</div>' : '';
+    var insH = ins ? '<div style="margin-bottom:7px;"><div style="background:rgba(var(--ac),0.07);border-radius:10px;padding:8px 10px;border:1px solid rgba(var(--ac),0.14);"><div style="font-size:9px;color:var(--pb-t2);line-height:1.45;font-style:italic;">🧠 ' + esc(ins) + '</div></div></div>' : '';
+    var foot = (mood || chem) ? '<div style="display:flex;align-items:center;gap:8px;padding-top:7px;margin-top:7px;border-top:1px solid rgba(var(--ac),0.12);"><span style="font-size:7.5px;color:var(--pb-t4);">влияние:</span>' + (mood ? '<span style="background:rgba(var(--ac),0.12);padding:3px 8px;border-radius:11px;font-size:9px;color:var(--pb-t2);">' + esc(String(mood).replace(/[\[\]]/g, '')) + '</span>' : '') + (chem ? '<span style="font-size:8px;color:var(--pb-c-green);">химия ' + esc(chem) + '</span>' : '') + '</div>' : '';
     return '<div class="pb-widget" style="--ac:' + p[0] + ';--hex:' + p[2] + ';--soft:' + p[1] + ';">' +
-      '<details open class="pbc" style="border-radius:22px;overflow:hidden;position:relative;background:linear-gradient(150deg,rgba(40,28,42,0.34),rgba(28,20,32,0.22));border:1px solid rgba(var(--ac),0.28);box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 22px rgba(var(--ac),0.14),inset 0 1px 0 rgba(255,255,255,0.09);">' +
+      '<details open class="pbc" style="border-radius:22px;overflow:hidden;position:relative;background:var(--pb-card);border:1px solid rgba(var(--ac),0.28);box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 22px rgba(var(--ac),0.14),inset 0 1px 0 rgba(255,255,255,0.09);">' +
       '<div style="position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(130% 100% at 100% 0%, rgba(var(--ac),0.32), transparent 60%);"></div>' +
       '<summary style="cursor:pointer;list-style:none;outline:none;position:relative;z-index:4;"><div style="padding:12px 15px;display:flex;align-items:center;gap:11px;border-bottom:1px solid rgba(var(--ac),0.14);">' +
       '<div style="width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 32% 28%,rgba(var(--ac),0.5),rgba(var(--ac),0.12));display:flex;align-items:center;justify-content:center;font-size:16px;border:1px solid rgba(var(--ac),0.45);box-shadow:0 0 16px rgba(var(--ac),0.45);flex-shrink:0;">' + p[3] + '</div>' +
-      '<div style="flex:1;min-width:0;"><div style="font-size:10px;font-weight:700;color:#fbeef7;">Цикл · День ' + esc(day) + '</div><div style="display:flex;align-items:center;gap:6px;margin-top:2px;"><span style="font-size:8px;font-weight:700;color:' + p[2] + ';">' + esc(phase) + '</span><span style="font-size:8px;color:#cbb0d4;">· ' + esc(next) + ' дн. до след.</span></div></div>' +
+      '<div style="flex:1;min-width:0;"><div style="font-size:10px;font-weight:700;color:var(--pb-t1);">Цикл · День ' + esc(day) + '</div><div style="display:flex;align-items:center;gap:6px;margin-top:2px;"><span style="font-size:8px;font-weight:700;color:' + p[2] + ';">' + esc(phase) + '</span><span style="font-size:8px;color:var(--pb-t3);">· ' + esc(next) + ' дн. до след.</span></div></div>' +
       '<span class="pb-arrow" style="font-size:10px;color:' + p[2] + ';transition:transform .3s;flex-shrink:0;">▼</span></div></summary>' +
       '<div style="padding:14px 16px 11px;position:relative;z-index:4;">' +
       '<div style="position:relative;height:30px;margin-bottom:5px;"><div style="position:absolute;left:0;right:0;top:11px;height:6px;border-radius:6px;overflow:hidden;display:flex;box-shadow:0 0 12px rgba(var(--ac),0.3);">' + th + '</div>' +
@@ -712,34 +720,34 @@ try {
   function pregHtml(f) {
     derivePreg(f);
     var week = f.week, day = f.day, trim = f.trimester, due = f.due, days = f.days_left;
-    var TR = week <= 12 ? ['150,214,182', '188,234,210', '#96d6b6', '🌱'] : week <= 27 ? ['244,196,150', '250,218,184', '#f4c496', '🍑'] : ['244,176,200', '250,208,222', '#f4b0c8', '🌸'];
+    var TR = week <= 12 ? ['150,214,182', '188,234,210', 'var(--pb-c-green2)', '🌱'] : week <= 27 ? ['244,196,150', '250,218,184', 'var(--pb-c-amber3)', '🍑'] : ['244,176,200', '250,208,222', 'var(--pb-c-tri3)', '🌸'];
     var TRC = [[150, 214, 182], [244, 196, 150], [244, 176, 200]], segs = [[0, 12], [12, 27], [27, 40]];
     var curTri = week <= 12 ? 0 : week <= 27 ? 1 : 2, icons = ['🌱', '🍑', '🌸'], hexes = ['96d6b6', 'f4c496', 'f4b0c8'];
     var th = '', lb = '';
     segs.forEach(function (s, i) {
       var w = (s[1] - s[0]) / 40 * 100, c = TRC[i].join(','), on = (i === curTri);
       th += '<div style="width:' + w + '%;height:100%;background:rgba(' + c + ',' + (on ? 0.95 : 0.4) + ');box-shadow:' + (on ? '0 0 10px rgba(' + c + ',0.9)' : 'none') + ';"></div>';
-      lb += '<span style="width:' + w + '%;text-align:center;color:' + (on ? '#' + hexes[i] : '#8c7c8c') + ';opacity:' + (on ? 1 : 0.6) + ';">' + icons[i] + '</span>';
+      lb += '<span style="width:' + w + '%;text-align:center;color:' + (on ? '#' + hexes[i] : 'var(--pb-t4)') + ';opacity:' + (on ? 1 : 0.6) + ';">' + icons[i] + '</span>';
     });
     var pos = Math.max(0, Math.min(100, (week / 40) * 100));
-    function cell(ic, label, val, sub) { return '<div style="flex:1;min-width:0;background:rgba(var(--ac),0.08);border-radius:10px;padding:7px 3px;text-align:center;border:1px solid rgba(var(--ac),0.14);"><div style="font-size:6.5px;color:#c8b4c4;margin-bottom:2px;">' + ic + ' ' + label + '</div><div style="font-size:9px;font-weight:700;color:var(--hex);line-height:1.15;">' + esc(val) + '</div>' + (sub ? '<div style="font-size:6.5px;color:#a890a4;margin-top:1px;">' + esc(sub) + '</div>' : '') + '</div>'; }
+    function cell(ic, label, val, sub) { return '<div style="flex:1;min-width:0;background:rgba(var(--ac),0.08);border-radius:10px;padding:7px 3px;text-align:center;border:1px solid rgba(var(--ac),0.14);"><div style="font-size:6.5px;color:var(--pb-t3);margin-bottom:2px;">' + ic + ' ' + label + '</div><div style="font-size:9px;font-weight:700;color:var(--hex);line-height:1.15;">' + esc(val) + '</div>' + (sub ? '<div style="font-size:6.5px;color:var(--pb-t4);margin-top:1px;">' + esc(sub) + '</div>' : '') + '</div>'; }
     var act = f.activity, symp = f.symptoms, gain = f.weight_gain, size = f.baby_size || '?', bweight = f.baby_weight || '';
     var mile = f.milestone, mdays = f.milestone_days, ins = f.insight, mood = f.moodlet, boost = f.attachment_boost;
-    var actH = act ? '<div style="margin-bottom:7px;font-size:8.5px;color:#d8c2d0;line-height:1.4;"><span style="color:' + TR[2] + ';">🦵</span> ' + esc(act) + '</div>' : '';
-    var sympH = symp ? '<div style="margin-bottom:7px;font-size:8.5px;color:#cdb8c8;line-height:1.4;"><span style="color:' + TR[2] + ';">●</span> ' + esc(symp) + '</div>' : '';
+    var actH = act ? '<div style="margin-bottom:7px;font-size:8.5px;color:var(--pb-t3);line-height:1.4;"><span style="color:' + TR[2] + ';">🦵</span> ' + esc(act) + '</div>' : '';
+    var sympH = symp ? '<div style="margin-bottom:7px;font-size:8.5px;color:var(--pb-t3);line-height:1.4;"><span style="color:' + TR[2] + ';">●</span> ' + esc(symp) + '</div>' : '';
     var cravH = softRow('🍓 хочется:', TR[2], f.cravings);
     var factH = softRow('✨', TR[2], f.fact);
     var careH = careTipRow(f.care_tip);
     var mileH = '';
-    if (mile) { var mt = /^\d+$/.test(String(mdays)) ? (String(mdays) === '0' ? 'сегодня' : 'через ' + esc(mdays) + ' дн') : ''; mileH = '<div style="margin-bottom:7px;"><div style="background:rgba(var(--ac),0.08);border-radius:10px;padding:8px 10px;border-left:2px solid var(--hex);display:flex;justify-content:space-between;align-items:center;gap:8px;"><span style="font-size:9px;font-weight:600;color:#f0e0ea;">📍 ' + esc(mile) + '</span>' + (mt ? '<span style="font-size:8px;color:#bca4b8;white-space:nowrap;">' + mt + '</span>' : '') + '</div></div>'; }
-    var insH = ins ? '<div style="margin-bottom:7px;"><div style="background:rgba(var(--ac),0.07);border-radius:10px;padding:8px 10px;border:1px solid rgba(var(--ac),0.14);"><div style="font-size:9px;color:#ecd8e6;line-height:1.45;font-style:italic;">🧠 ' + esc(ins) + '</div></div></div>' : '';
-    var foot = (mood || boost) ? '<div style="display:flex;align-items:center;gap:8px;padding-top:7px;margin-top:7px;border-top:1px solid rgba(var(--ac),0.12);"><span style="font-size:7.5px;color:#ac94a8;">влияние:</span>' + (mood ? '<span style="background:rgba(var(--ac),0.12);padding:3px 8px;border-radius:11px;font-size:9px;color:#ecd8e6;">' + esc(String(mood).replace(/[\[\]]/g, '')) + '</span>' : '') + (boost ? '<span style="font-size:8px;color:#96d6b6;">привязанность ' + esc(boost) + '</span>' : '') + '</div>' : '';
+    if (mile) { var mt = /^\d+$/.test(String(mdays)) ? (String(mdays) === '0' ? 'сегодня' : 'через ' + esc(mdays) + ' дн') : ''; mileH = '<div style="margin-bottom:7px;"><div style="background:rgba(var(--ac),0.08);border-radius:10px;padding:8px 10px;border-left:2px solid var(--hex);display:flex;justify-content:space-between;align-items:center;gap:8px;"><span style="font-size:9px;font-weight:600;color:var(--pb-t2);">📍 ' + esc(mile) + '</span>' + (mt ? '<span style="font-size:8px;color:var(--pb-t4);white-space:nowrap;">' + mt + '</span>' : '') + '</div></div>'; }
+    var insH = ins ? '<div style="margin-bottom:7px;"><div style="background:rgba(var(--ac),0.07);border-radius:10px;padding:8px 10px;border:1px solid rgba(var(--ac),0.14);"><div style="font-size:9px;color:var(--pb-t2);line-height:1.45;font-style:italic;">🧠 ' + esc(ins) + '</div></div></div>' : '';
+    var foot = (mood || boost) ? '<div style="display:flex;align-items:center;gap:8px;padding-top:7px;margin-top:7px;border-top:1px solid rgba(var(--ac),0.12);"><span style="font-size:7.5px;color:var(--pb-t4);">влияние:</span>' + (mood ? '<span style="background:rgba(var(--ac),0.12);padding:3px 8px;border-radius:11px;font-size:9px;color:var(--pb-t2);">' + esc(String(mood).replace(/[\[\]]/g, '')) + '</span>' : '') + (boost ? '<span style="font-size:8px;color:var(--pb-c-green2);">привязанность ' + esc(boost) + '</span>' : '') + '</div>' : '';
     return '<div class="pb-widget" style="--ac:' + TR[0] + ';--hex:' + TR[2] + ';--soft:' + TR[1] + ';">' +
-      '<details open class="pbc" style="border-radius:22px;overflow:hidden;position:relative;background:linear-gradient(150deg,rgba(42,30,38,0.34),rgba(28,20,30,0.22));border:1px solid rgba(var(--ac),0.28);box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 22px rgba(var(--ac),0.14),inset 0 1px 0 rgba(255,255,255,0.09);">' +
+      '<details open class="pbc" style="border-radius:22px;overflow:hidden;position:relative;background:var(--pb-card);border:1px solid rgba(var(--ac),0.28);box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 22px rgba(var(--ac),0.14),inset 0 1px 0 rgba(255,255,255,0.09);">' +
       '<div style="position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(130% 100% at 100% 0%, rgba(var(--ac),0.3), transparent 60%);"></div>' +
       '<summary style="cursor:pointer;list-style:none;outline:none;position:relative;z-index:4;"><div style="padding:12px 15px;display:flex;align-items:center;gap:11px;border-bottom:1px solid rgba(var(--ac),0.14);">' +
       '<div style="width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 32% 28%,rgba(var(--ac),0.5),rgba(var(--ac),0.12));display:flex;align-items:center;justify-content:center;font-size:16px;border:1px solid rgba(var(--ac),0.45);box-shadow:0 0 16px rgba(var(--ac),0.45);flex-shrink:0;">' + TR[3] + '</div>' +
-      '<div style="flex:1;min-width:0;"><div style="font-size:10px;font-weight:700;color:#fbeef4;">Беременность · ' + esc(week) + ' нед' + (num(day, 0) > 0 ? ' · ' + num(day, 0) + ' дн' : '') + '</div><div style="display:flex;align-items:center;gap:6px;margin-top:2px;"><span style="font-size:8px;font-weight:700;color:' + TR[2] + ';">' + (trim ? esc(trim) + ' триместр' : '') + '</span><span style="font-size:8px;color:#cdb0c4;">· ПДР ' + esc(due) + '</span></div></div>' +
+      '<div style="flex:1;min-width:0;"><div style="font-size:10px;font-weight:700;color:var(--pb-t1);">Беременность · ' + esc(week) + ' нед' + (num(day, 0) > 0 ? ' · ' + num(day, 0) + ' дн' : '') + '</div><div style="display:flex;align-items:center;gap:6px;margin-top:2px;"><span style="font-size:8px;font-weight:700;color:' + TR[2] + ';">' + (trim ? esc(trim) + ' триместр' : '') + '</span><span style="font-size:8px;color:var(--pb-t3);">· ПДР ' + esc(due) + '</span></div></div>' +
       '<span class="pb-arrow" style="font-size:10px;color:' + TR[2] + ';transition:transform .3s;flex-shrink:0;">▼</span></div></summary>' +
       '<div style="padding:14px 16px 11px;position:relative;z-index:4;">' +
       '<div style="position:relative;height:30px;margin-bottom:5px;"><div style="position:absolute;left:0;right:0;top:11px;height:6px;border-radius:6px;overflow:hidden;display:flex;box-shadow:0 0 12px rgba(var(--ac),0.3);">' + th + '</div>' +
@@ -753,25 +761,25 @@ try {
     derivePostpartum(f);
     var pp = f.pp_day, total = f.pp_total;
     var b = pp <= 4 ? 0 : pp <= 14 ? 1 : pp <= total ? 2 : 3;
-    var AC = '224,96,120', SOFT = '244,168,186', HEX = '#e0607a', ICON = '🤱';
+    var AC = '224,96,120', SOFT = '244,168,186', HEX = 'var(--pb-c-pp)', ICON = '🤱';
     // шкала спада кровотечения: обильные (0..4) / умеренные (4..14) / мажущие (14..total)
     var segs = [['Обильные', 0, 4, '224,84,104'], ['Умеренные', 4, 14, '224,120,140'], ['Мажущие', 14, total, '212,160,176']];
     var th = '', lb = '';
     segs.forEach(function (s) {
       var w = Math.max(0, (s[2] - s[1]) / total * 100), on = (pp > s[1] && pp <= s[2]) || (s[1] === 0 && pp <= s[2]);
       th += '<div style="width:' + w + '%;height:100%;background:rgba(' + s[3] + ',' + (on ? 0.95 : 0.38) + ');box-shadow:' + (on ? '0 0 10px rgba(' + s[3] + ',0.9)' : 'none') + ';"></div>';
-      lb += '<span style="width:' + w + '%;text-align:center;color:' + (on ? HEX : '#9a8088') + ';opacity:' + (on ? 1 : 0.6) + ';">' + s[0] + '</span>';
+      lb += '<span style="width:' + w + '%;text-align:center;color:' + (on ? HEX : 'var(--pb-t4)') + ';opacity:' + (on ? 1 : 0.6) + ';">' + s[0] + '</span>';
     });
     var pos = Math.max(0, Math.min(100, (pp / total) * 100));
-    function cell(ic, label, val, col) { return '<div style="flex:1;min-width:0;background:rgba(var(--ac),0.08);border-radius:10px;padding:7px 3px;text-align:center;border:1px solid rgba(var(--ac),0.14);"><div style="font-size:6.5px;color:#c8b0b6;margin-bottom:2px;">' + ic + ' ' + label + '</div><div style="font-size:8px;font-weight:700;color:' + (col || 'var(--hex)') + ';line-height:1.15;">' + esc(val) + '</div></div>'; }
+    function cell(ic, label, val, col) { return '<div style="flex:1;min-width:0;background:rgba(var(--ac),0.08);border-radius:10px;padding:7px 3px;text-align:center;border:1px solid rgba(var(--ac),0.14);"><div style="font-size:6.5px;color:var(--pb-t3);margin-bottom:2px;">' + ic + ' ' + label + '</div><div style="font-size:8px;font-weight:700;color:' + (col || 'var(--hex)') + ';line-height:1.15;">' + esc(val) + '</div></div>'; }
     var bleedColor = colorLevel(f.bleeding_pct);
     var rows = softRow('●', HEX, f.symptoms) + softRow('🍼 лактация:', HEX, f.lactation) + softRow('🍫 хочется:', HEX, f.cravings) + softRow('✨', HEX, f.fact) + softRow('⚠️ избегать:', HEX, f.avoid) + softRow('🛁 поможет:', HEX, f.selfcare) + careTipRow(f.care_tip) + insightRow(f.insight) + footRow(f.moodlet);
     return '<div class="pb-widget" style="--ac:' + AC + ';--hex:' + HEX + ';--soft:' + SOFT + ';">' +
-      '<details open class="pbc" style="border-radius:22px;overflow:hidden;position:relative;background:linear-gradient(150deg,rgba(42,28,32,0.34),rgba(28,20,24,0.22));border:1px solid rgba(var(--ac),0.28);box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 22px rgba(var(--ac),0.14),inset 0 1px 0 rgba(255,255,255,0.09);">' +
+      '<details open class="pbc" style="border-radius:22px;overflow:hidden;position:relative;background:var(--pb-card);border:1px solid rgba(var(--ac),0.28);box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 22px rgba(var(--ac),0.14),inset 0 1px 0 rgba(255,255,255,0.09);">' +
       '<div style="position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(130% 100% at 100% 0%, rgba(var(--ac),0.3), transparent 60%);"></div>' +
       '<summary style="cursor:pointer;list-style:none;outline:none;position:relative;z-index:4;"><div style="padding:12px 15px;display:flex;align-items:center;gap:11px;border-bottom:1px solid rgba(var(--ac),0.14);">' +
       '<div style="width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 32% 28%,rgba(var(--ac),0.5),rgba(var(--ac),0.12));display:flex;align-items:center;justify-content:center;font-size:16px;border:1px solid rgba(var(--ac),0.45);box-shadow:0 0 16px rgba(var(--ac),0.45);flex-shrink:0;">' + ICON + '</div>' +
-      '<div style="flex:1;min-width:0;"><div style="font-size:10px;font-weight:700;color:#fbeef2;">После родов · день ' + esc(pp) + '</div><div style="display:flex;align-items:center;gap:6px;margin-top:2px;"><span style="font-size:8px;font-weight:700;color:' + HEX + ';">' + esc(f.recovery) + '</span><span style="font-size:8px;color:#cbb0b6;">· ' + (b < 3 ? 'лохии ещё ' + Math.max(0, total - pp) + ' дн' : 'лохии прошли') + '</span></div></div>' +
+      '<div style="flex:1;min-width:0;"><div style="font-size:10px;font-weight:700;color:var(--pb-t1);">После родов · день ' + esc(pp) + '</div><div style="display:flex;align-items:center;gap:6px;margin-top:2px;"><span style="font-size:8px;font-weight:700;color:' + HEX + ';">' + esc(f.recovery) + '</span><span style="font-size:8px;color:var(--pb-t3);">· ' + (b < 3 ? 'лохии ещё ' + Math.max(0, total - pp) + ' дн' : 'лохии прошли') + '</span></div></div>' +
       '<span class="pb-arrow" style="font-size:10px;color:' + HEX + ';transition:transform .3s;flex-shrink:0;">▼</span></div></summary>' +
       '<div style="padding:14px 16px 11px;position:relative;z-index:4;">' +
       '<div style="position:relative;height:30px;margin-bottom:5px;"><div style="position:absolute;left:0;right:0;top:11px;height:6px;border-radius:6px;overflow:hidden;display:flex;box-shadow:0 0 12px rgba(var(--ac),0.3);">' + th + '</div>' +
@@ -834,7 +842,7 @@ try {
       var dl = num(f.days_left, null);
       if (dl == null) return {};
       var due = addDays(gd, dl), toDue = diffDays(due, date); // >0 до родов
-      if (toDue === 0) return { bg: 'rgba(232,90,110,0.30)', ring: '#e85a6e', mark: '👶' };
+      if (toDue === 0) return { bg: 'rgba(232,90,110,0.30)', ring: 'var(--pb-c-due)', mark: '👶' };
       if (toDue > 0 && toDue <= 280) {
         var wkAt = 40 - Math.ceil(toDue / 7);
         var triC = wkAt <= 12 ? '150,214,182' : wkAt <= 27 ? '244,196,150' : '244,176,200';
@@ -866,13 +874,13 @@ try {
   function calLegend(f) {
     if (f.state === 'heat' || f.slick != null) return legendItem('232,90,130', '🔥 течка') + legendItem('236,176,108', 'предтечка') + legendItem('198,150,210', 'послетечка') + legendItem('150,170,214', 'покой');
     if (f.state === 'rut' || f.knot != null) return legendItem('200,80,80', '🐺 гон') + legendItem('236,176,108', 'предгон') + legendItem('170,150,200', 'спад') + legendItem('150,170,214', 'покой');
-    if (f.state === 'postpartum' || f.pp_day != null) return '<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:9px;height:9px;border-radius:50%;background:rgba(232,90,110,0.7);display:inline-block;"></span>👶 роды</span>' + legendItem('224,80,104', '🩸 лохии') + '<span style="color:#a890a4;">(спадают к ' + num(f.pp_total, LOCHIA_LEN) + ' дню)</span>';
-    if (f.state === 'pregnancy' || f.week != null) return '<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:9px;height:9px;border-radius:50%;border:2px solid #e85a6e;box-sizing:border-box;display:inline-block;"></span>👶 ПДР</span>' + legendItem('150,214,182', '1 трим.') + legendItem('244,196,150', '2 трим.') + legendItem('244,176,200', '3 трим.');
+    if (f.state === 'postpartum' || f.pp_day != null) return '<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:9px;height:9px;border-radius:50%;background:rgba(232,90,110,0.7);display:inline-block;"></span>👶 роды</span>' + legendItem('224,80,104', '🩸 лохии') + '<span style="color:var(--pb-t4);">(спадают к ' + num(f.pp_total, LOCHIA_LEN) + ' дню)</span>';
+    if (f.state === 'pregnancy' || f.week != null) return '<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:9px;height:9px;border-radius:50%;border:2px solid var(--pb-c-due);box-sizing:border-box;display:inline-block;"></span>👶 ПДР</span>' + legendItem('150,214,182', '1 трим.') + legendItem('244,196,150', '2 трим.') + legendItem('244,176,200', '3 трим.');
     return legendItem('232,108,116', '🩸 месячные') + legendItem('198,124,210', '💜 овуляция') + legendItem('120,200,156', 'фолл.') + legendItem('236,176,108', 'лют.');
   }
 
   function calBar(f, selISO) {
-    if (!selISO) return '<div style="font-size:9px;color:#cbb0d4;margin-top:8px;line-height:1.4;">тапни день, чтобы отметить цикл или сделать его «сегодня»</div>';
+    if (!selISO) return '<div style="font-size:9px;color:var(--pb-t3);margin-top:8px;line-height:1.4;">тапни день, чтобы отметить цикл или сделать его «сегодня»</div>';
     var sd = parseISO(selISO), lbl = sd.getDate() + ' ' + MON_RU[sd.getMonth()];
     var b = '';
     if (f.state === 'heat' || f.slick != null) b += '<button class="pb-cal-act" data-act="heat" type="button">🔥 началась течка</button>';
@@ -881,30 +889,30 @@ try {
     else if (f.state === 'pregnancy' || f.week != null) b += '<button class="pb-cal-act" data-act="due" type="button">🍼 сюда ПДР</button>';
     else b += '<button class="pb-cal-act" data-act="period" type="button">🩸 месячные</button><button class="pb-cal-act" data-act="ovu" type="button">💜 овуляция</button>';
     b += '<button class="pb-cal-act" data-act="today" type="button">📅 сделать сегодня</button><button class="pb-cal-act" data-act="cancel" type="button">✕</button>';
-    return '<div style="margin-top:8px;padding:8px;border-radius:10px;background:rgba(240,168,196,0.08);border:1px solid rgba(240,168,196,0.18);"><div style="font-size:9px;color:#f5e6ef;margin-bottom:6px;">' + lbl + ':</div><div style="display:flex;flex-wrap:wrap;gap:5px;">' + b + '</div></div>';
+    return '<div style="margin-top:8px;padding:8px;border-radius:10px;background:rgba(240,168,196,0.08);border:1px solid rgba(240,168,196,0.18);"><div style="font-size:9px;color:var(--pb-t1);margin-bottom:6px;">' + lbl + ':</div><div style="display:flex;flex-wrap:wrap;gap:5px;">' + b + '</div></div>';
   }
 
   function calendarHtml(f, gd, vm, selISO) {
     var y = vm.getFullYear(), mo = vm.getMonth();
     var startWd = (new Date(y, mo, 1).getDay() + 6) % 7;
     var dim = new Date(y, mo + 1, 0).getDate();
-    var head = WD.map(function (w) { return '<div style="text-align:center;font-size:8px;color:#c4acce;padding:2px 0;">' + w + '</div>'; }).join('');
+    var head = WD.map(function (w) { return '<div style="text-align:center;font-size:8px;color:var(--pb-t3);padding:2px 0;">' + w + '</div>'; }).join('');
     var todayISO = toISO(gd), cells = '';
     for (var i = 0; i < startWd; i++) cells += '<div></div>';
     for (var dn = 1; dn <= dim; dn++) {
       var date = new Date(y, mo, dn), info = dayInfo(f, date, gd), isT = toISO(date) === todayISO;
-      cells += '<div class="pb-cal-day" data-iso="' + toISO(date) + '" style="position:relative;aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;background:' + (info.bg || 'transparent') + ';' + (isT ? 'box-shadow:0 0 0 2px #f0a8c4;' : '') + 'cursor:pointer;font-size:10px;color:#f0e0ea;">' + (info.ring ? '<span style="position:absolute;inset:2px;border:2px solid ' + info.ring + ';border-radius:50%;pointer-events:none;box-shadow:0 0 6px ' + info.ring + ';"></span>' : '') + dn + (info.mark ? '<span style="position:absolute;bottom:-1px;right:1px;font-size:8px;">' + info.mark + '</span>' : '') + '</div>';
+      cells += '<div class="pb-cal-day" data-iso="' + toISO(date) + '" style="position:relative;aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;background:' + (info.bg || 'transparent') + ';' + (isT ? 'box-shadow:0 0 0 2px var(--pb-accent,#f0a8c4);' : '') + 'cursor:pointer;font-size:10px;color:var(--pb-t2);">' + (info.ring ? '<span style="position:absolute;inset:2px;border:2px solid ' + info.ring + ';border-radius:50%;pointer-events:none;box-shadow:0 0 6px ' + info.ring + ';"></span>' : '') + dn + (info.mark ? '<span style="position:absolute;bottom:-1px;right:1px;font-size:8px;">' + info.mark + '</span>' : '') + '</div>';
     }
     return '<div class="pb-cal">' +
       '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">' +
-      '<button class="pb-cal-prev" type="button" style="background:none;border:none;color:#f0d4e2;font-size:15px;cursor:pointer;padding:2px 10px;">‹</button>' +
-      '<div style="font-size:12px;font-weight:600;color:#f5e6ef;">' + MON_NOM[mo] + ' ' + y + '</div>' +
-      '<button class="pb-cal-next" type="button" style="background:none;border:none;color:#f0d4e2;font-size:15px;cursor:pointer;padding:2px 10px;">›</button></div>' +
+      '<button class="pb-cal-prev" type="button" style="background:none;border:none;color:var(--pb-t2);font-size:15px;cursor:pointer;padding:2px 10px;">‹</button>' +
+      '<div style="font-size:12px;font-weight:600;color:var(--pb-t1);">' + MON_NOM[mo] + ' ' + y + '</div>' +
+      '<button class="pb-cal-next" type="button" style="background:none;border:none;color:var(--pb-t2);font-size:15px;cursor:pointer;padding:2px 10px;">›</button></div>' +
       '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">' + head + '</div>' +
       '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-top:2px;">' + cells + '</div>' +
-      '<div style="display:flex;flex-wrap:wrap;gap:6px 10px;margin-top:9px;font-size:8px;color:#c4acce;">' + calLegend(f) + '</div>' +
-      '<div style="font-size:9px;color:#cbb0d4;margin-top:8px;line-height:1.4;">📅 сегодня в игре: <b style="color:#f5e6ef;">' + gd.getDate() + ' ' + MON_RU[gd.getMonth()] + ' ' + gd.getFullYear() + '</b></div>' +
-      '<div style="display:flex;gap:5px;align-items:center;margin-top:6px;"><input class="pb-date-in" type="text" placeholder="ДД.ММ.ГГГГ" style="flex:1;min-width:0;box-sizing:border-box;background:rgba(255,255,255,0.05);border:1px solid rgba(240,168,196,0.22);border-radius:8px;padding:6px 8px;color:#fff;font:inherit;font-size:11px;outline:none;"><button class="pb-date-set" type="button" style="border:1px solid rgba(240,168,196,0.28);background:rgba(240,168,196,0.14);color:#f5d8e6;font:inherit;font-size:11px;padding:6px 11px;border-radius:8px;cursor:pointer;white-space:nowrap;">задать</button></div>' +
+      '<div style="display:flex;flex-wrap:wrap;gap:6px 10px;margin-top:9px;font-size:8px;color:var(--pb-t3);">' + calLegend(f) + '</div>' +
+      '<div style="font-size:9px;color:var(--pb-t3);margin-top:8px;line-height:1.4;">📅 сегодня в игре: <b style="color:var(--pb-t1);">' + gd.getDate() + ' ' + MON_RU[gd.getMonth()] + ' ' + gd.getFullYear() + '</b></div>' +
+      '<div style="display:flex;gap:5px;align-items:center;margin-top:6px;"><input class="pb-date-in" type="text" placeholder="ДД.ММ.ГГГГ" style="flex:1;min-width:0;box-sizing:border-box;background:var(--pb-input-bg);border:1px solid rgba(240,168,196,0.22);border-radius:8px;padding:6px 8px;color:var(--pb-t1);font:inherit;font-size:11px;outline:none;"><button class="pb-date-set" type="button" style="border:1px solid rgba(240,168,196,0.28);background:rgba(240,168,196,0.14);color:var(--pb-t2);font:inherit;font-size:11px;padding:6px 11px;border-radius:8px;cursor:pointer;white-space:nowrap;">задать</button></div>' +
       calBar(f, selISO) + '</div>';
   }
 
@@ -1089,9 +1097,9 @@ try {
     var rep = diagReport();
     out.innerHTML = '<div class="pb-form">' +
       '<label>Отчёт для разработчика (API-ключ сюда НЕ попадает)</label>' +
-      '<textarea class="pb-diag-ta" readonly style="width:100%;box-sizing:border-box;height:220px;background:rgba(255,255,255,0.05);border:1px solid rgba(240,168,196,0.22);border-radius:8px;padding:7px 9px;color:#fff;font:inherit;font-size:10px;line-height:1.35;outline:none;white-space:pre;overflow:auto;"></textarea>' +
+      '<textarea class="pb-diag-ta" readonly style="width:100%;box-sizing:border-box;height:220px;background:var(--pb-input-bg);border:1px solid rgba(240,168,196,0.22);border-radius:8px;padding:7px 9px;color:var(--pb-t1);font:inherit;font-size:10px;line-height:1.35;outline:none;white-space:pre;overflow:auto;"></textarea>' +
       '<div class="pb-form-btns"><button class="pb-diag-copy" type="button">📋 скопировать</button><button class="pb-diag-back" type="button">назад</button></div>' +
-      '<button class="pb-diag-clear" type="button" style="margin-top:9px;width:100%;border:1px solid rgba(240,168,196,0.22);background:rgba(240,168,196,0.06);color:#f0d4e2;font:inherit;font-size:11px;padding:7px 10px;border-radius:10px;cursor:pointer;">🧹 очистить журнал</button>' +
+      '<button class="pb-diag-clear" type="button" style="margin-top:9px;width:100%;border:1px solid rgba(240,168,196,0.22);background:rgba(240,168,196,0.06);color:var(--pb-t2);font:inherit;font-size:11px;padding:7px 10px;border-radius:10px;cursor:pointer;">🧹 очистить журнал</button>' +
       '<div class="pb-hint">Если кнопка «скопировать» не сработала (бывает в мобильных браузерах) — выдели текст в поле пальцем и скопируй вручную.</div></div>';
     var ta = out.querySelector('.pb-diag-ta'); if (ta) ta.value = rep;
     var cp = out.querySelector('.pb-diag-copy');
@@ -1118,13 +1126,27 @@ try {
       '<label>Режим плашки</label><select class="pb-i" data-k="mode"><option value="classic">Обычный</option><option value="omega">Омегаверс</option></select>' +
       '<label>Динамика (для омегаверса)</label><select class="pb-i" data-k="dynamic"><option value="omega">Омега (течка)</option><option value="alpha">Альфа (гон)</option><option value="beta">Бета (обычный цикл)</option></select>' +
       '<label>Пол персонажа (для местоимений в промпте)</label><select class="pb-i" data-k="gender"><option value="">— не указывать —</option><option value="m">Мужской (он/его)</option><option value="f">Женский (она/её)</option></select>' +
+      '<label>Тема оформления</label><div class="pb-themes">' + '<button class="pb-th" data-th="light" type="button">☀️ Светлая</button>' + '<button class="pb-th" data-th="dark" type="button">🌙 Тёмная</button>' + '<button class="pb-th" data-th="glass" type="button">✨ Прозрачная</button></div>' +
       '<label style="display:flex;align-items:center;gap:7px;margin-top:10px;cursor:pointer;"><input type="checkbox" class="pb-inject"> влиять на ролеплей (передавать состояние модели)</label>' +
       '<label style="display:flex;align-items:center;gap:7px;margin-top:8px;cursor:pointer;"><input type="checkbox" class="pb-calauto"> 📅 отслеживать игровую дату (метка в ответе, для календаря)</label>' +
       '<div class="pb-form-btns"><button class="pb-save" type="button">💾 сохранить</button><button class="pb-cancel" type="button">закрыть</button></div>' +
-      '<button class="pb-reset" type="button" style="margin-top:9px;width:100%;border:1px solid rgba(240,168,196,0.22);background:rgba(240,168,196,0.06);color:#f0d4e2;font:inherit;font-size:11px;padding:7px 10px;border-radius:10px;cursor:pointer;">🔄 сбросить цикл (перечитать день из сюжета)</button>' +
-      '<button class="pb-diag" type="button" style="margin-top:7px;width:100%;border:1px solid rgba(240,168,196,0.22);background:rgba(240,168,196,0.06);color:#f0d4e2;font:inherit;font-size:11px;padding:7px 10px;border-radius:10px;cursor:pointer;">📋 отчёт об ошибке</button>' +
+      '<button class="pb-reset" type="button" style="margin-top:9px;width:100%;border:1px solid rgba(240,168,196,0.22);background:rgba(240,168,196,0.06);color:var(--pb-t2);font:inherit;font-size:11px;padding:7px 10px;border-radius:10px;cursor:pointer;">🔄 сбросить цикл (перечитать день из сюжета)</button>' +
+      '<button class="pb-diag" type="button" style="margin-top:7px;width:100%;border:1px solid rgba(240,168,196,0.22);background:rgba(240,168,196,0.06);color:var(--pb-t2);font:inherit;font-size:11px;padding:7px 10px;border-radius:10px;cursor:pointer;">📋 отчёт об ошибке</button>' +
       '<div class="pb-hint">Прокси вшит. Ключ хранится в Tavo и уходит только на него. «Влиять на ролеплей» — состояние тихо дописывается в промпт. «Отслеживать дату» — модель в конце ответа ставит скрытую дату (её никто не видит), календарь по ней двигает день; тратит немного токенов. Сбрось цикл, если день привязался неверно.</div>' +
       '</div>';
+    (function bindThemes() {
+      var btns = out.querySelectorAll('.pb-th'); if (!btns.length) return;
+      function sync() { btns.forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-th') === theme()); }); }
+      btns.forEach(function (b) {
+        b.addEventListener('click', function (e) {
+          e.stopPropagation();
+          cfg.theme = b.getAttribute('data-th');
+          try { tavo.set(CFG_KEY, cfg, 'global'); } catch (e2) {}
+          applyTheme(); sync();
+        });
+      });
+      sync();
+    })();
     var injEl = out.querySelector('.pb-inject');
     if (injEl) {
       injEl.checked = cfg.injectRP !== false;
