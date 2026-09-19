@@ -30,6 +30,9 @@ const tavo = {
       if (name === 'pusya_bio_inject') {
         try { setExtensionPrompt('PUSYA_BIO', val || '', extension_prompt_types.IN_CHAT, 1, false, 'system'); } catch (e) {}
       }
+      if (name === 'pusya_bio_inject_t') { // скрытый исход теста на беременность
+        try { setExtensionPrompt('PUSYA_BIO_T', val || '', extension_prompt_types.IN_CHAT, 1, false, 'system'); } catch (e) {}
+      }
     },
     async load(name) { const m = mstore(); return m && m['file:' + name] != null ? m['file:' + name] : null; }
   },
@@ -78,7 +81,7 @@ try {
   // ── ВШИТЫЙ прокси (production-домен проекта pusya-bio-proxy на Vercel) ──
   // Если у прокси другой домен — поменяй тут и пересобери (build.py).
   var PROXY_URL = 'https://pusya-bio-proxy.spletnik-meme-worker.workers.dev';
-  var PB_VER = '1.8.0'; // подставляет сборщик (build.py / build_st.py)
+  var PB_VER = '1.9.0'; // подставляет сборщик (build.py / build_st.py)
   var CSS = "/* ── палитра тем: тёмная (по умолчанию), светлая, прозрачная ──\n   Нейтральные тона вынесены в переменные, потому что виджеты рисуются инлайн-стилями,\n   а var() в инлайн-стилях работает. Акцентные цвета фаз намеренно не темизируются. */\n#pb-root{\n  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;\n  --pb-t1:#fbeef7; --pb-t2:#e6d4ec; --pb-t3:#cbb0d4; --pb-t4:#a890b0;\n  --pb-card:linear-gradient(150deg,rgba(40,28,42,0.34),rgba(28,20,32,0.22));\n  --pb-pop-bg:rgba(18,12,16,0.98);\n  --pb-pop-br:rgba(240,168,196,0.3);\n  --pb-input-bg:rgba(255,255,255,0.05);\n  --pb-fab-bg:rgba(30,20,26,0.6);\n  --pb-fab-fg:#f0a8c4; --pb-accent:#f0a8c4;\n  --pb-shadow:0 14px 44px rgba(0,0,0,0.6),0 0 18px rgba(240,168,196,0.12);\n  --pb-blur:blur(22px) saturate(160%);\n  --pb-c-blue:#8ab4e0; --pb-c-calm:#96aad6; --pb-c-amber:#f0c078; --pb-c-amber2:#f0b070; --pb-c-amber3:#f4c496; --pb-c-green:#86dca6; --pb-c-green2:#96d6b6; --pb-c-pink:#ee7e96; --pb-c-hot:#f25c84; --pb-c-heat:#e85a82; --pb-c-mens:#f08c92; --pb-c-rut:#c85050; --pb-c-ovu:#d68ce0; --pb-c-after:#c696d2; --pb-c-fade:#aa96c8; --pb-c-tri3:#f4b0c8; --pb-c-pp:#e0607a; --pb-c-due:#e85a6e;\n}\n#pb-root.pb-theme-light{\n  --pb-t1:#3d2b36; --pb-t2:#543d4b; --pb-t3:#7b6473; --pb-t4:#9d8794;\n  --pb-card:linear-gradient(150deg,rgba(255,255,255,0.78),rgba(255,244,249,0.55));\n  --pb-pop-bg:rgba(253,246,249,0.985);\n  --pb-pop-br:rgba(198,138,166,0.38);\n  --pb-input-bg:rgba(0,0,0,0.045);\n  --pb-fab-bg:rgba(255,250,252,0.88);\n  --pb-fab-fg:#c2557f; --pb-accent:#c2557f;\n  --pb-shadow:0 14px 44px rgba(120,80,100,0.22),0 0 18px rgba(198,138,166,0.16);\n  --pb-c-blue:#3f74ad; --pb-c-calm:#4a6aa8; --pb-c-amber:#9a6407; --pb-c-amber2:#99630a; --pb-c-amber3:#98651f; --pb-c-green:#2c8551; --pb-c-green2:#2f8560; --pb-c-pink:#c04a67; --pb-c-hot:#cf2f5e; --pb-c-heat:#c33a63; --pb-c-mens:#bf4650; --pb-c-rut:#a83535; --pb-c-ovu:#9a4fa8; --pb-c-after:#8e56a0; --pb-c-fade:#6d5a92; --pb-c-tri3:#b8577f; --pb-c-pp:#b83b57; --pb-c-due:#c3384c;\n}\n#pb-root.pb-theme-glass{\n  --pb-t1:#fff8fc; --pb-t2:#f2e6ee; --pb-t3:#ddcad8; --pb-t4:#bfaaba;\n  --pb-card:linear-gradient(150deg,rgba(255,255,255,0.12),rgba(255,255,255,0.04));\n  --pb-pop-bg:rgba(28,20,26,0.42);\n  --pb-pop-br:rgba(255,255,255,0.24);\n  --pb-input-bg:rgba(255,255,255,0.12);\n  --pb-fab-bg:rgba(40,28,36,0.34);\n  --pb-fab-fg:#ffd9e8; --pb-accent:#ffd9e8;\n  --pb-shadow:0 14px 44px rgba(0,0,0,0.4);\n  --pb-blur:blur(26px) saturate(150%);\n}\n\n/* плавающий полупрозрачный кружок 🌸 (fixed, в родительском документе) */\n#pb-root .pb-fab{position:fixed;right:14px;bottom:92px;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:23px;line-height:1;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;border:1px solid rgba(240,168,196,0.4);background:var(--pb-fab-bg);color:var(--pb-fab-fg);opacity:.62;z-index:2147483000;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 4px 16px rgba(0,0,0,0.45);transition:opacity .2s,background .2s,box-shadow .2s;}\n#pb-root .pb-fab:hover{opacity:1;background:rgba(240,168,196,0.24);box-shadow:0 0 16px rgba(240,168,196,0.45);}\n#pb-root .pb-fab:active{cursor:grabbing;}\n#pb-root.open .pb-fab{opacity:1;background:rgba(240,168,196,0.28);}\n\n/* всплывающая плашка (fixed, над кружком) */\n#pb-root .pb-pop{position:fixed;right:12px;left:auto;bottom:124px;width:min(420px,calc(100vw - 24px));box-sizing:border-box;max-height:70vh;overflow:auto;z-index:2147483000;display:none;padding:11px 12px;border-radius:16px;border:1px solid var(--pb-pop-br);background:var(--pb-pop-bg);-webkit-backdrop-filter:var(--pb-blur);backdrop-filter:var(--pb-blur);box-shadow:var(--pb-shadow);animation:pb-pop-in .18s ease;}\n#pb-root.open .pb-pop{display:block;}\n@keyframes pb-pop-in{from{opacity:0;transform:translateY(8px) scale(.98);}to{opacity:1;transform:none;}}\n\n#pb-root .pb-pop-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px;}\n#pb-root .pb-tabs{display:flex;gap:3px;}\n#pb-root .pb-tab{background:none;border:none;color:var(--pb-t3);font-size:15px;cursor:pointer;padding:2px 7px;border-radius:9px;opacity:.5;transition:opacity .15s,background .15s;}\n#pb-root .pb-tab:hover{opacity:.85;}\n#pb-root .pb-tab.on{opacity:1;background:rgba(240,168,196,0.18);}\n#pb-root .pb-cal-day:hover{filter:brightness(1.25);}\n#pb-root.pb-theme-light .pb-cal-day:hover{filter:brightness(0.94);}\n#pb-root .pb-cal-act{font:inherit;font-size:10px;color:var(--pb-t2);background:rgba(240,168,196,0.14);border:1px solid rgba(240,168,196,0.28);border-radius:9px;padding:5px 9px;cursor:pointer;}\n#pb-root .pb-cal-act:hover{background:rgba(240,168,196,0.24);}\n#pb-root .pb-more-btn{text-align:center;font-size:10px;color:var(--pb-t2);opacity:.85;cursor:pointer;padding:7px 4px 3px;letter-spacing:.02em;user-select:none;-webkit-user-select:none;}\n#pb-root .pb-more-btn:hover{opacity:1;}\n#pb-root .pb-title{font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--pb-t1);opacity:.9;}\n#pb-root .pb-tools{display:flex;align-items:center;gap:2px;}\n#pb-root .pb-tools button{background:none;border:none;color:var(--pb-t2);font-size:13px;cursor:pointer;opacity:.6;padding:2px 5px;border-radius:8px;transition:opacity .15s,transform .2s,background .15s;}\n#pb-root .pb-tools button:hover{opacity:1;background:rgba(240,168,196,0.14);}\n#pb-root .pb-refresh.spin{animation:pb-spin .9s linear infinite;opacity:1;}\n@keyframes pb-spin{to{transform:rotate(360deg);}}\n\n#pb-root .pb-cap{font-size:12px;color:var(--pb-t2);opacity:.8;padding:6px 2px;animation:pb-pulse 1.3s ease-in-out infinite;}\n#pb-root .pb-err{font-size:12px;color:#f0a0b4;padding:6px 2px;line-height:1.4;}\n#pb-root.pb-theme-light .pb-err{color:#c0405e;}\n@keyframes pb-pulse{0%,100%{opacity:.5;}50%{opacity:1;}}\n\n#pb-root .pb-widget{max-width:420px;margin:0 auto;}\n#pb-root .pb-widget details[open] .pb-arrow{transform:rotate(180deg);}\n#pb-root .pb-widget summary::-webkit-details-marker{display:none;}\n@keyframes pb-mpulse{0%,100%{box-shadow:0 0 8px currentColor;}50%{box-shadow:0 0 18px currentColor;}}\n\n/* форма настроек */\n#pb-root .pb-form{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--pb-t2);}\n#pb-root .pb-form label{opacity:.75;margin-top:6px;}\n#pb-root .pb-i{width:100%;box-sizing:border-box;background:var(--pb-input-bg);border:1px solid rgba(240,168,196,0.22);border-radius:8px;padding:7px 9px;color:var(--pb-t1);font:inherit;font-size:12px;outline:none;}\n#pb-root .pb-i:focus{border-color:rgba(240,168,196,0.5);}\n#pb-root .pb-form-btns{display:flex;gap:8px;margin-top:11px;}\n#pb-root .pb-save,#pb-root .pb-cancel{border:1px solid rgba(240,168,196,0.28);background:rgba(240,168,196,0.12);color:var(--pb-t1);font:inherit;font-size:12px;font-weight:600;padding:7px 13px;border-radius:10px;cursor:pointer;}\n#pb-root .pb-save:hover,#pb-root .pb-cancel:hover{background:rgba(240,168,196,0.2);}\n#pb-root .pb-hint{font-size:10px;color:var(--pb-t3);opacity:.7;line-height:1.35;margin-top:9px;}\n\n/* переключатель темы (сегментированный) */\n#pb-root .pb-themes{display:flex;gap:5px;margin-top:4px;}\n#pb-root .pb-th{flex:1;display:flex;align-items:center;justify-content:center;gap:4px;font:inherit;font-size:11px;color:var(--pb-t2);background:var(--pb-input-bg);border:1px solid rgba(240,168,196,0.22);border-radius:10px;padding:7px 6px;cursor:pointer;transition:background .15s,border-color .15s;}\n#pb-root .pb-th:hover{background:rgba(240,168,196,0.14);}\n#pb-root .pb-th.on{background:rgba(240,168,196,0.2);border-color:rgba(240,168,196,0.55);color:var(--pb-t1);font-weight:600;}"; // стили инжектятся в родительский документ (build.py подставит)
   var MARKUP =
     '<button class="pb-fab" type="button" title="цикл и беременность">🌸</button>' +
@@ -163,6 +166,7 @@ try {
       'ключ задан: ' + (cfg.apiKey ? 'да' : 'НЕТ') + '  |  режим: ' + mode() + (mode() === 'omega' ? ' / ' + dyn() : ''),
       'пересчёт раз в: ' + everyN() + '  |  влияние на РП: ' + (cfg.injectRP === false ? 'выкл' : 'вкл'),
       'экран: ' + (pwin.innerWidth || '?') + 'x' + (pwin.innerHeight || '?'),
+      'скрытое (спойлер): зачатие ' + (repro ? (repro.conc ? 'БЫЛО ~' + repro.conc.d : 'нет') + ' · актов ' + repro.acts.length + ' · тестов ' + repro.tests.length : 'не загружено'),
       '',
       '--- последние события (новые снизу) ---'
     ];
@@ -222,7 +226,7 @@ try {
       '<div style="position:absolute;top:6px;width:16px;height:16px;border-radius:50%;transform:translateX(-50%);border:2px solid rgba(255,255,255,0.75);animation:pb-mpulse 2.8s ease-in-out infinite;z-index:2;left:' + pos + '%;background:radial-gradient(circle,' + p[2] + ',rgba(0,0,0,0.15));color:' + p[2] + ';"></div></div>' +
       '<div style="display:flex;justify-content:space-between;font-size:6.5px;margin-bottom:11px;">' + lb + '</div>' +
       '<div style="display:flex;gap:5px;margin-bottom:9px;">' + cells + '</div>' +
-      moreBlock(o.rows.join('') + (o.foot || '')) + '</div></details></div>';
+      (o.extra || '') + moreBlock(o.rows.join('') + (o.foot || '')) + '</div></details></div>';
   }
 
   function resetPhaseFields(f, keys) { for (var i = 0; i < keys.length; i++) { f[keys[i]] = null; } }
@@ -294,7 +298,7 @@ try {
     if (f.care_tip) rows.push(careTipRow(f.care_tip));
     if (f.insight) rows.push(insightRow(f.insight));
     return phaseWidget({
-      title: 'Цикл течки · День ' + esc(f.day), sub: '· ' + esc(f.days_until_next) + ' дн до след.', PH: PH, phase: f.phase,
+      title: 'Цикл течки · День ' + esc(f.day), sub: num(f.delay, 0) > 0 ? '<span style="font-weight:700;color:var(--pb-c-hot);">· ⏳ течка задерживается ' + num(f.delay, 0) + ' дн</span>' : '· ' + esc(f.days_until_next) + ' дн до след.', PH: PH, phase: f.phase, extra: reproHtml(f, 'var(--pb-c-heat)'),
       segs: [['Покой', 0, 0.6], ['Предтечка', 0.6, 0.72], ['Течка', 0.72, 0.88], ['Послетечка', 0.88, 1]],
       markerFrac: f.day / f.length,
       cells: [['💧', 'Слизь', f.slick, colorLevel(f.slick_pct)], ['🌡', 'Фертильн.', f.fertility, colorLevel(f.fertility_pct)], ['🩸', 'Феромоны', f.pheromones, colorLevel(f.pheromones_pct)], ['🔥', 'Тяга', f.need_alpha, colorLevel(f.need_alpha_pct)]],
@@ -363,6 +367,10 @@ try {
     '  fact: <one short cute or informative fact about this cycle phase>',
     '  avoid: <what to avoid right now, short>',
     '  selfcare: <what would help her feel better now, short>',
+    '  sex: <да|нет>  — "да" ONLY if she had penetrative sex that could cause pregnancy IN THE RECENT MESSAGES (not earlier, not implied). Otherwise "нет".',
+    '  protection: <нет|презерватив|ОК|прерванный|неизвестно>  — contraception during that sex ("ОК" = birth-control pills, "прерванный" = withdrawal). Only when sex: да.',
+    '  test: <нет|положительный|отрицательный>  — did she take a pregnancy test in the recent messages, and what did it show IN THE STORY.',
+    '  period_started: <да|нет>  — did her period start in the recent messages.',
     '',
     'If state = pregnancy, output these keys:',
     '  state: pregnancy',
@@ -443,6 +451,10 @@ try {
     '  fact: <one short omegaverse fact about this phase>',
     '  avoid: <what to avoid right now, short>',
     '  selfcare: <what would help right now, short>',
+    '  sex: <да|нет>  — "да" ONLY if the omega had penetrative sex that could cause pregnancy IN THE RECENT MESSAGES (not earlier, not implied). Otherwise "нет".',
+    '  protection: <нет|презерватив|ОК|прерванный|неизвестно>  — contraception during that sex ("ОК" = pills, "прерванный" = withdrawal / no knot inside). Only when sex: да.',
+    '  test: <нет|положительный|отрицательный>  — did the omega take a pregnancy test in the recent messages, and what did it show IN THE STORY.',
+    '  period_started: <да|нет>  — did the heat start in the recent messages.',
     '',
     'If state = pregnancy, output the pregnancy keys (use OMEGAVERSE terms in free text — pup(s), knotting/knot conception, nest). Make symptoms/activity SPECIFIC to the actual week, not generic:',
     '  state: pregnancy | week | day | trimester | due | days_left | baby_size | baby_weight | activity | symptoms | weight_gain | milestone | milestone_days | insight | moodlet | attachment_boost | energy | energy_pct | cravings | care_tip | fact | avoid | selfcare',
@@ -519,15 +531,17 @@ try {
     return { bg: bg.join('\n'), transcript: transcript };
   }
 
-  function stateToLines(f) { if (!f) return '(нет)'; return Object.keys(f).map(function (k) { return k + ': ' + f[k]; }).join('\n'); }
-  function buildUserPrompt(cx, last, lock, dateHint) {
+  function stateToLines(f) { if (!f) return '(нет)'; return Object.keys(f).filter(function (k) { return k.charAt(0) !== '_'; }).map(function (k) { return k + ': ' + f[k]; }).join('\n'); } // _служебные — только для плашки
+  function buildUserPrompt(cx, last, lock, dateHint, logged) {
     var parts = [];
     parts.push('=== Mode ===\n' + (mode() === 'omega' ? ('OMEGAVERSE, dynamic: ' + dyn()) : 'classic'));
     if (dateHint) parts.push('=== In-story date ===\nCurrent in-story date is ' + dateHint + '. Output EXACTLY "date: ' + dateHint + '" UNCHANGED — unless the recent messages EXPLICITLY move time to a different day (a stated date, or a clear cue like "на следующее утро", "три дня спустя", "неделю спустя"). Never guess, never drift, never use the real-world/today date. If unsure, keep ' + dateHint + '.');
     else parts.push('=== In-story date ===\nOutput "date:" ONLY if the story contains an explicit date or a clear date/time cue (use the story\'s own year). If there is NO date information in the story, output exactly "date: none" — do NOT invent or guess a date.');
     if (lock && lock.kind === 'pregnancy') parts.push('=== FIXED BY CALENDAR ===\nIf still pregnant, it is at week ' + lock.week + ' (days_left ' + lock.days_left + ') — use exactly these, do NOT change them. If the baby was born in the story, switch to state=postpartum with pp_day 1. IMPORTANT: still fill ALL other fields FULLY (activity, symptoms, cravings, energy, milestone, insight, care_tip, fact, moodlet) — never omit the flavor.');
     else if (lock && lock.kind === 'postpartum') parts.push('=== FIXED BY CALENDAR ===\nThis is the POSTPARTUM period: pp_day is FIXED at ' + lock.pp_day + ' of about ' + lock.pp_total + ' days of lochia (postpartum bleeding). Output EXACTLY "pp_day: ' + lock.pp_day + '" and "pp_total: ' + lock.pp_total + '" — never change them. Only once pp_day clearly passes ' + lock.pp_total + ' AND the body has recovered may you switch to the normal cycle/heat state. IMPORTANT: still fill ALL other fields FULLY (lochia, lactation, symptoms, cravings, energy, insight, care_tip, fact, moodlet) — never omit the flavor.');
+    else if (lock && lock.delay > 0) parts.push('=== FIXED BY CALENDAR ===\nThe cycle day is FIXED at day ' + lock.day + ' of a ' + lock.length + '-day cycle, and the ' + (mode() === 'omega' && dyn() === 'omega' ? 'heat' : 'period') + ' is LATE by ' + lock.delay + ' days — it has NOT started. Output EXACTLY "day: ' + lock.day + '" and "length: ' + lock.length + '". Reflect the lateness in the flavor (waiting, worry, thinking about a test) but NEVER decide or state that she is pregnant unless the story itself shows a positive test. IMPORTANT: still fill ALL flavor fields FULLY.');
     else if (lock) parts.push('=== FIXED BY CALENDAR ===\nThe cycle day is FIXED at day ' + lock.day + ' of a ' + lock.length + '-day cycle. Output EXACTLY "day: ' + lock.day + '" and "length: ' + lock.length + '" — never change them. IMPORTANT: still fill ALL other fields FULLY (phase, and every flavor field: symptoms, cravings, energy, insight, care_tip, fact, moodlet, and the rest) — never omit the flavor.');
+    if (logged) parts.push('=== Already logged ===\nSex already logged on these in-story dates: ' + logged + '. Output "sex: да" ONLY for a NEW act that happens in the recent messages and is not one of these dates.');
     if (cx.bg) parts.push('=== Character background ===\n' + cx.bg);
     parts.push('=== Last known state (carry forward) ===\n' + (last ? stateToLines(last) : '(none yet — infer from the scene)'));
     parts.push('=== Recent scene transcript ===\n' + cx.transcript);
@@ -707,14 +721,14 @@ try {
       '<div style="position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(130% 100% at 100% 0%, rgba(var(--ac),0.32), transparent 60%);"></div>' +
       '<summary style="cursor:pointer;list-style:none;outline:none;position:relative;z-index:4;"><div style="padding:12px 15px;display:flex;align-items:center;gap:11px;border-bottom:1px solid rgba(var(--ac),0.14);">' +
       '<div style="width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 32% 28%,rgba(var(--ac),0.5),rgba(var(--ac),0.12));display:flex;align-items:center;justify-content:center;font-size:16px;border:1px solid rgba(var(--ac),0.45);box-shadow:0 0 16px rgba(var(--ac),0.45);flex-shrink:0;">' + p[3] + '</div>' +
-      '<div style="flex:1;min-width:0;"><div style="font-size:10px;font-weight:700;color:var(--pb-t1);">Цикл · День ' + esc(day) + '</div><div style="display:flex;align-items:center;gap:6px;margin-top:2px;"><span style="font-size:8px;font-weight:700;color:' + p[2] + ';">' + esc(phase) + '</span><span style="font-size:8px;color:var(--pb-t3);">· ' + esc(next) + ' дн. до след.</span></div></div>' +
+      '<div style="flex:1;min-width:0;"><div style="font-size:10px;font-weight:700;color:var(--pb-t1);">Цикл · День ' + esc(day) + '</div><div style="display:flex;align-items:center;gap:6px;margin-top:2px;"><span style="font-size:8px;font-weight:700;color:' + p[2] + ';">' + esc(phase) + '</span>' + (num(f.delay, 0) > 0 ? '<span style="font-size:8px;font-weight:700;color:var(--pb-c-hot);">· 🩸 задержка ' + num(f.delay, 0) + ' дн</span>' : '<span style="font-size:8px;color:var(--pb-t3);">· ' + esc(next) + ' дн. до след.</span>') + '</div></div>' +
       '<span class="pb-arrow" style="font-size:10px;color:' + p[2] + ';transition:transform .3s;flex-shrink:0;">▼</span></div></summary>' +
       '<div style="padding:14px 16px 11px;position:relative;z-index:4;">' +
       '<div style="position:relative;height:30px;margin-bottom:5px;"><div style="position:absolute;left:0;right:0;top:11px;height:6px;border-radius:6px;overflow:hidden;display:flex;box-shadow:0 0 12px rgba(var(--ac),0.3);">' + th + '</div>' +
       '<div style="position:absolute;top:6px;width:16px;height:16px;border-radius:50%;transform:translateX(-50%);border:2px solid rgba(255,255,255,0.75);animation:pb-mpulse 2.8s ease-in-out infinite;z-index:2;left:' + pos + '%;background:radial-gradient(circle,' + p[2] + ',rgba(0,0,0,0.15));color:' + p[2] + ';"></div></div>' +
       '<div style="display:flex;justify-content:space-between;font-size:6.5px;margin-bottom:11px;">' + lb + '</div>' +
       '<div style="display:flex;gap:5px;margin-bottom:9px;">' + cell('🌱', 'Фертильн.', fert, fertColor) + cell('🔥', 'Либидо', lib, libColor) + cell('⚡', 'Энергия', f.energy, energyColorOf(f.energy)) + cell('🤰', 'Риск', risk, riskColor) + cell('💜', 'Овул.', ovu + 'д', p[2]) + '</div>' +
-      moreBlock(sympH + cravH + factH + softRow('⚠️ избегать:', p[2], f.avoid) + softRow('🛁 поможет:', p[2], f.selfcare) + careH + insH + foot) + '</div></details></div>';
+      reproHtml(f, p[2]) + moreBlock(sympH + cravH + factH + softRow('⚠️ избегать:', p[2], f.avoid) + softRow('🛁 поможет:', p[2], f.selfcare) + careH + insH + foot) + '</div></details></div>';
   }
 
   function pregHtml(f) {
@@ -850,10 +864,22 @@ try {
       }
       return {};
     }
+    var info = cycleDayInfo(f, date, gd, st), iso = toISO(date), mk = '';
+    (f._testDays || []).forEach(function (t) { var q = String(t).split('|'); if (q[0] === iso) mk = q[1] === '+' ? '🧪➕' : '🧪'; });
+    if (!mk && (f._actDays || []).indexOf(iso) >= 0) mk = '💞';
+    if (mk) info.mark = mk;
+    return info;
+  }
+  function cycleDayInfo(f, date, gd, st) {
     var len = num(f.length, 28); if (len < 4) len = 28;
-    var cd = num(f.day, 1);
-    var anchor = addDays(gd, -(cd - 1));
-    var n = diffDays(date, anchor); var day = (((n % len) + len) % len) + 1;
+    var anchor = f._start ? parseISO(f._start) : addDays(gd, -(num(f.day, 1) - 1));
+    var n = diffDays(date, anchor), dl = num(f.delay, 0);
+    if (dl > 0 && diffDays(date, gd) > 0 && n >= 0) return {}; // при задержке будущее неизвестно
+    if (dl > 0 && n >= 0) {
+      var heatMode = st === 'heat' || f.slick != null, hd = Math.ceil(0.72 * len);
+      if ((!heatMode && n >= len) || (heatMode && n >= hd - 1)) return { bg: 'rgba(240,150,90,0.24)', mark: '⏳' };
+    }
+    var day = (((n % len) + len) % len) + 1;
     if (st === 'heat' || f.slick != null) {
       var fr = day / len, ph = fr < 0.6 ? 'Покой' : fr < 0.72 ? 'Предтечка' : fr < 0.88 ? 'Течка' : 'Послетечка';
       var C = { 'Покой': '150,170,214', 'Предтечка': '236,176,108', 'Течка': '232,90,130', 'Послетечка': '198,150,210' }[ph];
@@ -872,11 +898,12 @@ try {
 
   function legendItem(rgb, label) { return '<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:9px;height:9px;border-radius:3px;background:rgba(' + rgb + ',0.55);display:inline-block;"></span>' + label + '</span>'; }
   function calLegend(f) {
-    if (f.state === 'heat' || f.slick != null) return legendItem('232,90,130', '🔥 течка') + legendItem('236,176,108', 'предтечка') + legendItem('198,150,210', 'послетечка') + legendItem('150,170,214', 'покой');
+    var rx = (num(f.delay, 0) > 0 ? legendItem('240,150,90', '⏳ задержка') : '') + ((f._actDays || []).length ? '<span>💞 ПА</span>' : '') + ((f._testDays || []).length ? '<span>🧪 тест</span>' : '');
+    if (f.state === 'heat' || f.slick != null) return legendItem('232,90,130', '🔥 течка') + legendItem('236,176,108', 'предтечка') + legendItem('198,150,210', 'послетечка') + legendItem('150,170,214', 'покой') + rx;
     if (f.state === 'rut' || f.knot != null) return legendItem('200,80,80', '🐺 гон') + legendItem('236,176,108', 'предгон') + legendItem('170,150,200', 'спад') + legendItem('150,170,214', 'покой');
     if (f.state === 'postpartum' || f.pp_day != null) return '<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:9px;height:9px;border-radius:50%;background:rgba(232,90,110,0.7);display:inline-block;"></span>👶 роды</span>' + legendItem('224,80,104', '🩸 лохии') + '<span style="color:var(--pb-t4);">(спадают к ' + num(f.pp_total, LOCHIA_LEN) + ' дню)</span>';
     if (f.state === 'pregnancy' || f.week != null) return '<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:9px;height:9px;border-radius:50%;border:2px solid var(--pb-c-due);box-sizing:border-box;display:inline-block;"></span>👶 ПДР</span>' + legendItem('150,214,182', '1 трим.') + legendItem('244,196,150', '2 трим.') + legendItem('244,176,200', '3 трим.');
-    return legendItem('232,108,116', '🩸 месячные') + legendItem('198,124,210', '💜 овуляция') + legendItem('120,200,156', 'фолл.') + legendItem('236,176,108', 'лют.');
+    return legendItem('232,108,116', '🩸 месячные') + legendItem('198,124,210', '💜 овуляция') + legendItem('120,200,156', 'фолл.') + legendItem('236,176,108', 'лют.') + rx;
   }
 
   function calBar(f, selISO) {
@@ -888,6 +915,7 @@ try {
     else if (f.state === 'postpartum' || f.pp_day != null) b += '<button class="pb-cal-act" data-act="birth" type="button">👶 роды сюда</button>';
     else if (f.state === 'pregnancy' || f.week != null) b += '<button class="pb-cal-act" data-act="due" type="button">🍼 сюда ПДР</button>';
     else b += '<button class="pb-cal-act" data-act="period" type="button">🩸 месячные</button><button class="pb-cal-act" data-act="ovu" type="button">💜 овуляция</button>';
+    if (reproOn() && !(f.state === 'rut' || f.knot != null) && !(f.state === 'pregnancy' || f.week != null) && !(f.state === 'postpartum' || f.pp_day != null)) b += '<button class="pb-cal-act" data-act="act0" type="button">💞 ПА без защиты</button><button class="pb-cal-act" data-act="act1" type="button">🛡 ПА с защитой</button><button class="pb-cal-act" data-act="test" type="button">🧪 сделать тест</button>';
     b += '<button class="pb-cal-act" data-act="today" type="button">📅 сделать сегодня</button><button class="pb-cal-act" data-act="cancel" type="button">✕</button>';
     return '<div style="margin-top:8px;padding:8px;border-radius:10px;background:rgba(240,168,196,0.08);border:1px solid rgba(240,168,196,0.18);"><div style="font-size:9px;color:var(--pb-t1);margin-bottom:6px;">' + lbl + ':</div><div style="display:flex;flex-wrap:wrap;gap:5px;">' + b + '</div></div>';
   }
@@ -921,11 +949,26 @@ try {
     var st = await tavo.get(ST_KEY, 'chat'); var f = (st && st.fields) || {}; var len = num(f.length, 28); if (len < 4) len = 28;
     if (type === 'due') { await tavo.set(ANCHOR_KEY, { kind: 'pregnancy', due: toISO(date) }, 'chat'); }
     else if (type === 'birth') { await tavo.set(ANCHOR_KEY, { kind: 'postpartum', birth: toISO(date), total: num(f.pp_total, LOCHIA_LEN) }, 'chat'); }
+    else if (type === 'act0' || type === 'act1') {
+      var ra = await loadRepro(), ana = await tavo.get(ANCHOR_KEY, 'chat');
+      logAct(ra, ana, toISO(date), type === 'act0' ? 'нет' : 'презерватив'); await saveRepro();
+      toast(type === 'act0' ? 'ПА без защиты отмечен' : 'ПА с защитой отмечен');
+    }
+    else if (type === 'test') {
+      var gdt = await loadGameDate();
+      if (diffDays(date, gdt) > 0) { toast('тест можно сделать только сегодня или раньше'); renderCalendar(); return; }
+      var rt = await loadRepro(), isoT = toISO(date), resT = testOutcome(rt, isoT);
+      rt.tests = rt.tests.filter(function (t) { return t.d !== isoT; }); rt.tests.push({ d: isoT, r: resT });
+      diagPush('тест', isoT + ' · ' + (resT === '+' ? '«+»' : '«−»') + ' (из календаря)');
+      toast(resT === '+' ? '🧪 две полоски — ПОЛОЖИТЕЛЬНЫЙ' : '🧪 одна полоска — отрицательный');
+      if (resT === '+') { await confirmPregnancy(rt, date); f = { state: 'pregnancy' }; } else await saveRepro();
+    }
     else {
       var start = type === 'period' ? date : type === 'ovu' ? addDays(date, -((len - 14) - 1)) : addDays(date, -Math.floor(len * 0.72));
       await tavo.set(ANCHOR_KEY, { kind: cycleKind(), start: toISO(start), length: len }, 'chat');
+      var rs = await loadRepro(); if (rs.conc && rs.conc.d < toISO(start)) { rs.conc = null; await saveRepro(); } // отметили приход — прежнего зачатия не было
+      toast('цикл отмечен ✓');
     }
-    toast('цикл отмечен ✓');
     if (configured()) { genBio(); }
     else { var gd = await loadGameDate(); if (f.state) { f = await applyAnchor(f, gd); await tavo.set(ST_KEY, { fields: f, count: (st && st.count) || 0 }, 'chat'); } renderCalendar(); }
   }
@@ -970,12 +1013,221 @@ try {
   /* ── ЯКОРЬ ЦИКЛА: день привязан к игровой дате, не «плывёт» от сообщений ── */
   var ANCHOR_KEY = 'pusya_bio_anchor';
   function cycleKind() { if (mode() === 'omega') { if (dyn() === 'alpha') return 'rut'; if (dyn() === 'beta') return 'cycle'; return 'heat'; } return 'cycle'; }
+
+  /* ── РЕПРОДУКЦИЯ: журнал ПА, скрытый кубик зачатия, задержка, тесты ──
+     Исход решает скрытый кубик при каждом акте (по реальной вероятности: день цикла × защита).
+     Если зачатие было — месячные/течка не придут, задержка растёт, тест со временем даст «+».
+     Кубик детерминирован от seed чата: результат стабилен между пересчётами и не «перебрасывается». */
+  var REPRO_KEY = 'pusya_bio_repro', INJECT_T_FILE = 'pusya_bio_inject_t';
+  var repro = null;
+  function reproOn() { return cycleKind() !== 'rut'; } // альфы не беременеют
+  async function loadRepro() {
+    var r = null; try { r = await tavo.get(REPRO_KEY, 'chat'); } catch (e) {}
+    if (!r || typeof r !== 'object') r = {};
+    if (!r.seed) r.seed = String(Math.floor(Math.random() * 1e9));
+    if (!Array.isArray(r.acts)) r.acts = [];
+    if (!Array.isArray(r.tests)) r.tests = [];
+    repro = r; return r;
+  }
+  async function saveRepro() { try { await tavo.set(REPRO_KEY, repro, 'chat'); } catch (e) {} }
+  function srand(str) { // детерминированное «случайное» [0,1) от строки
+    var h = 2166136261 >>> 0;
+    for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+    h ^= h >>> 15; h = Math.imul(h, 2246822507) >>> 0; h ^= h >>> 13; h = Math.imul(h, 3266489909) >>> 0; h ^= h >>> 16;
+    return (h >>> 0) / 4294967296;
+  }
+  // множитель риска за один акт: доля «без защиты». Порядки как у типичного использования.
+  var PROT = { 'нет': 1, 'презерватив': 0.03, 'ок': 0.01, 'прерванный': 0.2, 'неизвестно': 0.5 };
+  var PROT_LABEL = { 'нет': 'без защиты', 'презерватив': 'презерватив', 'ок': 'ОК (таблетки)', 'прерванный': 'прерванный', 'неизвестно': 'защита неясна' };
+  function normProt(v) {
+    v = String(v || '').toLowerCase().trim();
+    if (/презерв|кондом|condom/.test(v)) return 'презерватив';
+    if (/^ок\b|таблет|оральн|pill|кок\b|контрацептив/.test(v)) return 'ок';
+    if (/прерв|withdraw/.test(v)) return 'прерванный';
+    if (/^нет|без|none|^no\b/.test(v)) return 'нет';
+    return 'неизвестно';
+  }
+  // шанс зачатия за один незащищённый акт по дню цикла
+  function baseChance(kind, day, len) {
+    if (kind === 'heat') { var fr = day / len; return fr < 0.6 ? 0.01 : fr < 0.72 ? 0.08 : fr < 0.88 ? 0.4 : 0.04; }
+    var rel = day - (len - 14); // 0 = день овуляции (фертильное окно −5…+1, пик ~33%)
+    var T = { '-5': 0.10, '-4': 0.16, '-3': 0.14, '-2': 0.27, '-1': 0.31, '0': 0.33, '1': 0.08 };
+    return T[String(rel)] != null ? T[String(rel)] : 0.01;
+  }
+  // чувствительность домашнего теста по дням от зачатия (ХГЧ ещё не набрался → ложный «−»)
+  function testSens(d) { return d < 8 ? 0 : d < 10 ? 0.1 : d < 11 ? 0.25 : d < 12 ? 0.45 : d < 13 ? 0.65 : d < 14 ? 0.8 : d < 15 ? 0.9 : 0.98; }
+  // P(месячные опоздали хотя бы на k дн | зачатия нет): опоздание «после риска» ~ floor(u²·8)
+  function jitterP(k) { return k <= 0 ? 1 : Math.max(0, 1 - Math.sqrt(k / 8)); }
+  // статус текущего цикла с учётом задержки. Без актов ведёт себя ровно как прежний циклический якорь.
+  function cycleState(an, r, gd) {
+    var len = num(an.length, 28); if (len < 4) len = 28;
+    var heat = an.kind === 'heat', seed = (r && r.seed) || '';
+    var start = parseISO(an.start), rolled = false, hold = false;
+    var n0 = diffDays(gd, start);
+    if (n0 < 0) { var k0 = Math.floor(n0 / len), s0 = addDays(start, k0 * len); return { start: s0, day: n0 - k0 * len + 1, len: len, delay: 0, rolled: false, hold: false, win: s0 }; }
+    var conc = r && r.conc ? r.conc.d : null;
+    for (var g = 0; g < 600; g++) {
+      var sISO = toISO(start), nx = addDays(start, len), nISO = toISO(nx);
+      if (!heat) {
+        if (conc && conc >= sISO && conc < nISO) { hold = true; break; } // зачатие в этом цикле — месячные не придут
+        var lim = toISO(addDays(nx, 8));
+        var risky = r && r.acts.some(function (a) { return a.d >= sISO && a.d < lim; });
+        var j = risky ? Math.floor(Math.pow(srand(seed + '|j|' + sISO), 2) * 8) : 0; // после риска — «стрессовое» опоздание 0…7 дн
+        var due = addDays(nx, j);
+        if (diffDays(gd, due) >= 0) { start = due; rolled = true; continue; }
+        break;
+      } else {
+        if (conc && conc < sISO && conc >= toISO(addDays(start, -len))) { hold = true; break; } // зачатие в прошлую течку — в этом цикле течки не будет
+        if (diffDays(gd, nx) >= 0) { start = nx; rolled = true; continue; }
+        break;
+      }
+    }
+    var day = diffDays(gd, start) + 1, delay = 0, win = start;
+    if (!heat) {
+      var exp = addDays(start, len);
+      if (diffDays(gd, exp) >= 0) delay = diffDays(gd, exp) + 1;
+      if (day > len) day = len;
+    } else {
+      var hd = Math.ceil(0.72 * len);
+      if (hold && day >= hd) { delay = day - hd + 1; day = hd - 1; }
+      if (day > len) day = len;
+      if (hold || day < hd) win = addDays(start, -len); // риск прошлой течки ещё не «разрешился»
+    }
+    return { start: start, day: day, len: len, delay: delay, rolled: rolled, hold: hold, win: win };
+  }
+  // записать акт (один на игровой день) и тайно бросить кубик
+  function logAct(r, an, iso, prot) {
+    var kind = cycleKind(), ex = r.acts.filter(function (a) { return a.d === iso; })[0];
+    if (ex && (PROT[prot] != null ? PROT[prot] : 0.5) <= (PROT[ex.prot] != null ? PROT[ex.prot] : 0.5)) return false; // уже записан, не рискованнее
+    var cs = an && an.start && an.kind === kind ? cycleState(an, r, parseISO(iso)) : null;
+    var base = cs ? baseChance(kind, cs.day, cs.len) : 0.05;
+    var p = Math.min(0.95, base * (PROT[prot] != null ? PROT[prot] : 0.5));
+    var c = iso;
+    if (cs && kind !== 'heat') { var ov = toISO(addDays(cs.start, cs.len - 14 - 1)); if (ov > c) c = ov; } // сперматозоиды «ждут» овуляцию
+    if (ex) { ex.prot = prot; ex.p = p; ex.c = c; } else r.acts.push({ d: iso, prot: prot, p: p, c: c });
+    r.acts.sort(function (a, b) { return a.d < b.d ? -1 : 1; });
+    if (r.acts.length > 40) r.acts = r.acts.slice(-40);
+    if (!r.conc && srand(r.seed + '|a|' + iso) < p) r.conc = { d: c }; // скрытый результат — нигде не показывается
+    diagPush('ПА', iso + ' · ' + PROT_LABEL[prot] + ' · шанс ~' + Math.max(1, Math.round(p * 100)) + '%');
+    return true;
+  }
+  // что покажет тест в этот день (заранее, чтобы основная модель знала исход ДО сцены)
+  function testOutcome(r, iso) {
+    if (!r || !r.conc || r.conc.d > iso) return '-';
+    return srand(r.seed + '|t|' + iso) < testSens(diffDays(parseISO(iso), parseISO(r.conc.d))) ? '+' : '-';
+  }
+  async function confirmPregnancy(r, gd) {
+    var c = r.conc ? r.conc.d : null;
+    if (!c) { var best = null; r.acts.forEach(function (a) { if (!best || a.p > best.p) best = a; }); c = best ? best.c : toISO(addDays(gd, -14)); } // сюжет сказал «+» сам
+    var due = addDays(parseISO(c), 266); // 38 нед от зачатия = 40 акушерских
+    await tavo.set(ANCHOR_KEY, { kind: 'pregnancy', due: toISO(due), confirmed: toISO(gd) }, 'chat');
+    diagPush('беременность', 'тест «+» · зачатие ~' + c + ' · ПДР ' + toISO(due));
+    repro = { seed: r.seed, acts: [], tests: [], conc: null }; await saveRepro();
+    return true;
+  }
+  // события из ответа считалки: акт / тест / начало месячных (течки)
+  async function processEvents(f, gd) {
+    var r = await loadRepro(), iso = toISO(gd), kind = cycleKind(), changed = false;
+    var an = await tavo.get(ANCHOR_KEY, 'chat');
+    if (/^\s*да/i.test(String(f.period_started || ''))) {
+      if (an && an.kind === kind) {
+        var L = num(an.length, 28);
+        an.start = kind === 'heat' ? toISO(addDays(gd, -(Math.ceil(0.72 * L) - 1))) : iso;
+        await tavo.set(ANCHOR_KEY, an, 'chat');
+      }
+      if (r.conc) r.conc = null; // сюжет — канон: раз пришли, зачатия не было
+      changed = true; diagPush('цикл', (kind === 'heat' ? 'течка' : 'месячные') + ' пришли по сюжету');
+    }
+    if (/^\s*да/i.test(String(f.sex || ''))) { if (logAct(r, an, iso, normProt(f.protection))) changed = true; }
+    var tr = String(f.test || '').toLowerCase(), res = /полож|posit/.test(tr) ? '+' : /отриц|negat/.test(tr) ? '-' : null;
+    var pregnant = false;
+    if (res) {
+      r.tests = r.tests.filter(function (t) { return t.d !== iso; }); r.tests.push({ d: iso, r: res });
+      if (r.tests.length > 20) r.tests = r.tests.slice(-20);
+      changed = true; diagPush('тест', iso + ' · ' + (res === '+' ? '«+»' : '«−»') + ' (по сюжету)');
+      if (res === '+') pregnant = await confirmPregnancy(r, gd);
+    }
+    if (changed && !pregnant) await saveRepro();
+    return pregnant;
+  }
+  function stripEvents(f) { delete f.sex; delete f.protection; delete f.test; delete f.period_started; }
+  // сводка для плашки/календаря (без спойлера скрытого исхода)
+  function reproSummary(f, r, cs, gd) {
+    var wISO = toISO(cs.win);
+    f._actDays = r.acts.slice(-30).map(function (a) { return a.d; });
+    f._testDays = r.tests.slice(-15).map(function (t) { return t.d + '|' + t.r; });
+    var acts = r.acts.filter(function (a) { return a.d >= wISO; });
+    var tests = r.tests.filter(function (t) { return t.d >= wISO; });
+    f._acts = acts.slice(-3).map(function (a) { return a.d + '|' + a.prot + '|' + Math.max(1, Math.round(a.p * 100)); });
+    f._tests = tests.slice(-2).map(function (t) { return t.d + '|' + t.r; });
+    if (!acts.length) { f._risk = 0; f._testNow = 0; return; }
+    var q = 1, sw = 0, ss = 0, maxC = null;
+    acts.forEach(function (a) {
+      q *= (1 - a.p); var dc = diffDays(gd, parseISO(a.c)), sn = dc >= 0 ? testSens(dc) : 0;
+      sw += a.p; ss += a.p * sn;
+    });
+    // дата надёжного теста — по актам с заметным риском (акт после овуляции не сдвигает её)
+    var sig = acts.filter(function (a) { return a.p >= 0.005; });
+    if (!sig.length) sig = [acts.reduce(function (m, a) { return a.p > m.p ? a : m; }, acts[0])];
+    sig.forEach(function (a) { if (!maxC || a.c > maxC) maxC = a.c; });
+    q = 1 - q;
+    var D = num(f.delay, 0), heat = f.state === 'heat' || f.slick != null;
+    var pj = heat ? (D > 0 ? 0 : 1) : jitterP(D);           // по омегаверсу течка не опаздывает без причины
+    var post = q + (1 - q) * pj > 0 ? q / (q + (1 - q) * pj) : 0; // с учётом того, что месячные/течка ещё не пришли
+    var sens = sw > 0 ? ss / sw : 0;
+    f._risk = Math.max(1, Math.round(post * 100)); f._testNow = Math.round(post * sens * 100);
+    f._rel = toISO(addDays(parseISO(maxC), 14));
+    f._early = sens < 0.8;
+    f._unprot = acts.some(function (a) { return a.prot === 'нет' || a.prot === 'неизвестно'; });
+    f._withdraw = acts.some(function (a) { return a.prot === 'прерванный'; });
+    f._fertile = acts.some(function (a) { return a.prot === 'нет' && a.p >= 0.08; });
+    f._ec = acts.some(function (a) { var dd = diffDays(gd, parseISO(a.d)); return dd >= 0 && dd <= 3 && a.prot !== 'презерватив' && a.prot !== 'ок'; });
+  }
+  // блок «риск и тест» в плашке
+  function reproHtml(f, col) {
+    var acts = f._acts || [], tests = f._tests || [], delay = num(f.delay, 0);
+    if (!acts.length && !tests.length && !delay) return '';
+    var heat = f.state === 'heat' || f.slick != null;
+    function dm(iso) { var d = parseISO(iso); return d ? d.getDate() + ' ' + MON_RU[d.getMonth()] : String(iso || ''); }
+    var L = [];
+    if (delay > 0) L.push('<div style="color:var(--pb-c-hot);font-weight:700;">' + (heat ? '⏳ течка задерживается ' : '🩸 задержка ') + delay + ' дн</div>');
+    acts.forEach(function (x) { var p = x.split('|'); L.push('<div>💞 ' + dm(p[0]) + ' — ' + esc(PROT_LABEL[p[1]] || p[1]) + ' <span style="opacity:.7;">· ~' + esc(p[2]) + '%</span></div>'); });
+    if (acts.length) L.push('<div>шанс беременности' + (delay > 0 ? ' с учётом задержки' : ' в этом цикле') + ': <b style="color:' + col + ';">~' + num(f._risk, 0) + '%</b></div>');
+    if (acts.length) L.push('<div>🧪 если сделать тест сегодня: «+» ~' + num(f._testNow, 0) + '%' + (f._early ? ' <span style="opacity:.7;">— рано, может соврать «−»</span>' : '') + '</div>');
+    tests.forEach(function (x) { var p = x.split('|'); L.push('<div>🧪 ' + dm(p[0]) + ': ' + (p[1] === '+' ? '<b style="color:var(--pb-c-hot);">«+» две полоски</b>' : '«−» одна полоска') + '</div>'); });
+    var tip = '';
+    if (delay > 0) tip = (heat ? 'Течка не пришла в срок' : 'Месячные не пришли в срок') + ' — самое время сделать тест.';
+    else if (f._unprot) tip = 'Незащищённый ПА' + (f._fertile ? ' в фертильные дни' : '') + ' — тест покажет достоверно с ' + dm(f._rel) + ' или с первого дня задержки. Раньше может выйти ложный «−».';
+    else if (f._withdraw) tip = 'Прерванный акт — ненадёжная защита. Тест надёжен с ' + dm(f._rel) + '.';
+    else if (acts.length) tip = 'Секс был с защитой — риск низкий, но для спокойствия тест можно сделать с ' + dm(f._rel) + '.';
+    var ec = f._ec && !delay ? '<div style="margin-top:3px;opacity:.85;">⏱ прошло меньше 72 ч — ещё можно экстренную контрацепцию</div>' : '';
+    return '<div style="margin:0 0 9px;background:rgba(var(--ac),0.07);border-radius:10px;padding:8px 10px;border:1px solid rgba(var(--ac),0.16);font-size:8.5px;color:var(--pb-t2);line-height:1.55;">' +
+      '<div style="font-size:9px;font-weight:700;color:var(--pb-t1);margin-bottom:3px;">🩺 риск и тест</div>' + L.join('') +
+      (tip ? '<div style="margin-top:4px;color:var(--pb-t1);">💡 ' + esc(tip) + '</div>' : '') + ec + '</div>';
+  }
+  // скрытые части инжекта: задержка/ранние признаки (в основной фон) + заранее решённый исход теста (всегда)
+  async function reproInjectParts(f) {
+    var o = { facts: [], always: '' };
+    if (!reproOn() || !(f && (f.state === 'cycle' || f.state === 'heat'))) return o;
+    var r = await loadRepro(), gd = await loadGameDate(), iso = toISO(gd), heat = f.state === 'heat';
+    var D = num(f.delay, 0);
+    if (D > 0) o.facts.push((heat ? 'течка не пришла в срок, опаздывает на ' : 'задержка месячных ') + D + ' дн — персонаж это замечает и может тревожиться или думать о тесте');
+    if (r.conc && diffDays(gd, parseISO(r.conc.d)) >= 14) o.facts.push('ранние признаки (без названия причины): быстрая усталость, лёгкая тошнота по утрам, обострённое обоняние');
+    var wISO = f._start ? toISO(addDays(parseISO(f._start), heat ? -num(f.length, 28) : 0)) : '';
+    var hasActs = r.acts.some(function (a) { return a.d >= wISO; });
+    if (hasActs || D > 0) {
+      var res = testOutcome(r, iso);
+      o.always = '[Скрытая подсказка для отыгрыша, НЕ показывать читателю: если в этой сцене ' + (charName || 'персонаж') + ' делает тест на беременность, тест покажет ' +
+        (res === '+' ? 'ПОЛОЖИТЕЛЬНЫЙ результат (две полоски)' : 'ОТРИЦАТЕЛЬНЫЙ результат (одна полоска)') + '. Не заставляй персонажа делать тест без повода и не упоминай эту подсказку.]';
+    }
+    return o;
+  }
   async function computeLock(gd) {
     var a = await tavo.get(ANCHOR_KEY, 'chat');
     if (a && a.kind === 'pregnancy' && a.due) { var left = Math.max(0, diffDays(parseISO(a.due), gd)); return { kind: 'pregnancy', week: Math.max(1, Math.min(42, 40 - Math.ceil(left / 7))), days_left: left }; }
     if (a && a.kind === 'postpartum' && a.birth) { var since = diffDays(gd, parseISO(a.birth)); return { kind: 'postpartum', pp_day: Math.max(1, since + 1), pp_total: num(a.total, LOCHIA_LEN) }; }
     var kind = cycleKind();
-    if (a && a.kind === kind && a.start) { var len = num(a.length, 28); var n = diffDays(gd, parseISO(a.start)); return { kind: kind, day: ((n % len) + len) % len + 1, length: len }; }
+    if (a && a.kind === kind && a.start) { var rr = reproOn() ? await loadRepro() : null; var cs = cycleState(a, rr, gd); return { kind: kind, day: cs.day, length: cs.len, delay: cs.delay }; }
     return null;
   }
   async function applyAnchor(f, gd) {
@@ -1004,13 +1256,19 @@ try {
     }
     var kind = cycleKind();
     var an = await tavo.get(ANCHOR_KEY, 'chat');
+    var rp = reproOn() ? await loadRepro() : null;
     if (an && an.kind === kind && an.start) {
-      var len = num(an.length, 28); var n = diffDays(gd, parseISO(an.start));
-      f.day = ((n % len) + len) % len + 1; f.length = len;
+      var cs = cycleState(an, rp, gd);
+      if (cs.rolled) { an.start = toISO(cs.start); await tavo.set(ANCHOR_KEY, an, 'chat'); }
+      f.day = cs.day; f.length = cs.len; f.delay = cs.delay; f._start = toISO(cs.start);
+      f.days_until_next = null; f.days_until_ovulation = null; // пересчитает derive — согласованно с якорем
+      if (rp) reproSummary(f, rp, cs, gd);
     } else {
       var L = num(f.length, 28); if (L < 4) L = 28; var D = num(f.day, 1); if (D < 1) D = 1;
-      await tavo.set(ANCHOR_KEY, { kind: kind, start: toISO(addDays(gd, -(D - 1))), length: L }, 'chat');
-      f.day = D; f.length = L;
+      var st0 = addDays(gd, -(D - 1));
+      await tavo.set(ANCHOR_KEY, { kind: kind, start: toISO(st0), length: L }, 'chat');
+      f.day = D; f.length = L; f.delay = 0; f._start = toISO(st0);
+      if (rp) reproSummary(f, rp, { start: st0, win: kind === 'heat' ? addDays(st0, -L) : st0 }, gd);
     }
     return f;
   }
@@ -1028,7 +1286,7 @@ try {
   }
 
   // строка, которую плагин допишет в промпт основной модели (влияние на отыгрыш)
-  function injectText(f) {
+  function injectText(f, extra) {
     if (!f || !f.state || f.state === 'none') return '';
     var who = charName || 'персонаж';
     var g = cfg.gender === 'm' ? ' Пол персонажа — МУЖСКОЙ: используй мужской род и местоимения он/его, даже если это омега в течке.' : cfg.gender === 'f' ? ' Пол персонажа — ЖЕНСКИЙ: используй женский род и местоимения она/её.' : ' Сохраняй тот пол и род персонажа, что заданы в сюжете; не меняй их из-за течки/цикла.';
@@ -1045,6 +1303,7 @@ try {
       if (f.need_alpha) b.push('тяга к альфе: ' + f.need_alpha);
       if (f.moodlet) b.push('настроение: ' + String(f.moodlet).replace(/[\[\]]/g, ''));
       if (f.symptoms) b.push('самочувствие: ' + f.symptoms);
+      (extra || []).forEach(function (x) { b.push(x); });
       return W(b.join('; '));
     }
     if (f.state === 'rut' || f.knot != null) {
@@ -1085,10 +1344,16 @@ try {
     if (f.moodlet) b.push('настроение: ' + String(f.moodlet).replace(/[\[\]]/g, ''));
     if (f.symptoms) b.push('симптомы: ' + f.symptoms);
     if (f.cravings) b.push('тянет: ' + f.cravings);
+    (extra || []).forEach(function (x) { b.push(x); });
     return W(b.join('; '));
   }
-  function writeInject(f) {
-    try { tavo.file.save(INJECT_FILE, (cfg.injectRP === false) ? '' : injectText(f)); } catch (e) {}
+  async function writeInject(f) {
+    try {
+      var on = cfg.injectRP !== false;
+      var rf = on ? await reproInjectParts(f) : { facts: [], always: '' };
+      tavo.file.save(INJECT_FILE, on ? injectText(f, rf.facts) : '');
+      tavo.file.save(INJECT_T_FILE, on ? rf.always : ''); // исход теста — без троттлинга, чтобы модель знала его в нужный момент
+    } catch (e) {}
   }
 
   /* ── форма настроек прямо в диалоге (прокси вшит, не спрашиваем) ── */
@@ -1216,7 +1481,9 @@ try {
       var lock = await computeLock(gd);
       var cx = await buildContext();
       var last = await tavo.get(ST_KEY, 'chat');
-      var messages = [{ role: 'system', content: buildSystem() }, { role: 'user', content: buildUserPrompt(cx, last && last.fields, lock, storedISO) }];
+      var rpl = reproOn() ? await loadRepro() : null;
+      var logged = rpl ? rpl.acts.slice(-6).map(function (a) { return a.d; }).join(', ') : '';
+      var messages = [{ role: 'system', content: buildSystem() }, { role: 'user', content: buildUserPrompt(cx, last && last.fields, lock, storedISO, logged) }];
       var raw = await callModel(messages);
       // пустой ответ (частый случай у gemini: весь лимит съело «мышление» или сработали фильтры)
       if (!String(raw || '').trim()) { diagPush('пусто', 'модель вернула пустой ответ'); throw new Error('модель вернула пустой ответ. Обычно это лимит токенов (у gemini его съедает «мышление») или фильтры провайдера — попробуй другую модель-считалку.'); }
@@ -1232,6 +1499,14 @@ try {
       }
       // дата из СЮЖЕТА (считалка читает историю) — определяет дату даже в существующем чате
       if (/^\d{4}-\d{2}-\d{2}$/.test(String(f.date || '')) && f.date !== storedISO) { await saveGameDate(parseISO(f.date)); gd = parseISO(f.date); }
+      // события цикла из сюжета: ПА (скрытый кубик), тест, начало месячных/течки
+      if (reproOn() && (f.state === 'cycle' || f.state === 'heat')) {
+        if (await processEvents(f, gd)) f = { state: 'pregnancy', date: f.date };
+      }
+      stripEvents(f);
+      // только что подтверждённую беременность не отдаём обратно в цикл, если считалка «забыла»
+      var anNow = await tavo.get(ANCHOR_KEY, 'chat');
+      if (anNow && anNow.kind === 'pregnancy' && anNow.confirmed && (f.state === 'cycle' || f.state === 'heat') && diffDays(gd, parseISO(anNow.confirmed)) < 14) f = { state: 'pregnancy', date: f.date };
       f = await applyAnchor(f, gd);
       var total = await tavo.message.count();
       await tavo.set(ST_KEY, { fields: f, count: total }, 'chat');
