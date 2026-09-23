@@ -81,7 +81,7 @@ try {
   // ── ВШИТЫЙ прокси (production-домен проекта pusya-bio-proxy на Vercel) ──
   // Если у прокси другой домен — поменяй тут и пересобери (build.py).
   var PROXY_URL = 'https://pusya-bio-proxy.spletnik-meme-worker.workers.dev';
-  var PB_VER = '1.9.1'; // подставляет сборщик (build.py / build_st.py)
+  var PB_VER = '1.10.0'; // подставляет сборщик (build.py / build_st.py)
   var CSS = "/* ── палитра тем: тёмная (по умолчанию), светлая, прозрачная ──\n   Нейтральные тона вынесены в переменные, потому что виджеты рисуются инлайн-стилями,\n   а var() в инлайн-стилях работает. Акцентные цвета фаз намеренно не темизируются. */\n#pb-root{\n  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;\n  --pb-t1:#fbeef7; --pb-t2:#e6d4ec; --pb-t3:#cbb0d4; --pb-t4:#a890b0;\n  --pb-card:linear-gradient(150deg,rgba(40,28,42,0.34),rgba(28,20,32,0.22));\n  --pb-pop-bg:rgba(18,12,16,0.98);\n  --pb-pop-br:rgba(240,168,196,0.3);\n  --pb-input-bg:rgba(255,255,255,0.05);\n  --pb-fab-bg:rgba(30,20,26,0.6);\n  --pb-fab-fg:#f0a8c4; --pb-accent:#f0a8c4;\n  --pb-shadow:0 14px 44px rgba(0,0,0,0.6),0 0 18px rgba(240,168,196,0.12);\n  --pb-blur:blur(22px) saturate(160%);\n  --pb-c-blue:#8ab4e0; --pb-c-calm:#96aad6; --pb-c-amber:#f0c078; --pb-c-amber2:#f0b070; --pb-c-amber3:#f4c496; --pb-c-green:#86dca6; --pb-c-green2:#96d6b6; --pb-c-pink:#ee7e96; --pb-c-hot:#f25c84; --pb-c-heat:#e85a82; --pb-c-mens:#f08c92; --pb-c-rut:#c85050; --pb-c-ovu:#d68ce0; --pb-c-after:#c696d2; --pb-c-fade:#aa96c8; --pb-c-tri3:#f4b0c8; --pb-c-pp:#e0607a; --pb-c-due:#e85a6e;\n}\n#pb-root.pb-theme-light{\n  --pb-t1:#3d2b36; --pb-t2:#543d4b; --pb-t3:#7b6473; --pb-t4:#9d8794;\n  --pb-card:linear-gradient(150deg,rgba(255,255,255,0.78),rgba(255,244,249,0.55));\n  --pb-pop-bg:rgba(253,246,249,0.985);\n  --pb-pop-br:rgba(198,138,166,0.38);\n  --pb-input-bg:rgba(0,0,0,0.045);\n  --pb-fab-bg:rgba(255,250,252,0.88);\n  --pb-fab-fg:#c2557f; --pb-accent:#c2557f;\n  --pb-shadow:0 14px 44px rgba(120,80,100,0.22),0 0 18px rgba(198,138,166,0.16);\n  --pb-c-blue:#3f74ad; --pb-c-calm:#4a6aa8; --pb-c-amber:#9a6407; --pb-c-amber2:#99630a; --pb-c-amber3:#98651f; --pb-c-green:#2c8551; --pb-c-green2:#2f8560; --pb-c-pink:#c04a67; --pb-c-hot:#cf2f5e; --pb-c-heat:#c33a63; --pb-c-mens:#bf4650; --pb-c-rut:#a83535; --pb-c-ovu:#9a4fa8; --pb-c-after:#8e56a0; --pb-c-fade:#6d5a92; --pb-c-tri3:#b8577f; --pb-c-pp:#b83b57; --pb-c-due:#c3384c;\n}\n#pb-root.pb-theme-glass{\n  --pb-t1:#fff8fc; --pb-t2:#f2e6ee; --pb-t3:#ddcad8; --pb-t4:#bfaaba;\n  --pb-card:linear-gradient(150deg,rgba(255,255,255,0.12),rgba(255,255,255,0.04));\n  --pb-pop-bg:rgba(28,20,26,0.42);\n  --pb-pop-br:rgba(255,255,255,0.24);\n  --pb-input-bg:rgba(255,255,255,0.12);\n  --pb-fab-bg:rgba(40,28,36,0.34);\n  --pb-fab-fg:#ffd9e8; --pb-accent:#ffd9e8;\n  --pb-shadow:0 14px 44px rgba(0,0,0,0.4);\n  --pb-blur:blur(26px) saturate(150%);\n}\n\n/* плавающий полупрозрачный кружок 🌸 (fixed, в родительском документе) */\n#pb-root .pb-fab{position:fixed;right:14px;bottom:92px;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:23px;line-height:1;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;border:1px solid rgba(240,168,196,0.4);background:var(--pb-fab-bg);color:var(--pb-fab-fg);opacity:.62;z-index:2147483000;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 4px 16px rgba(0,0,0,0.45);transition:opacity .2s,background .2s,box-shadow .2s;}\n#pb-root .pb-fab:hover{opacity:1;background:rgba(240,168,196,0.24);box-shadow:0 0 16px rgba(240,168,196,0.45);}\n#pb-root .pb-fab:active{cursor:grabbing;}\n#pb-root.open .pb-fab{opacity:1;background:rgba(240,168,196,0.28);}\n\n/* всплывающая плашка (fixed, над кружком) */\n#pb-root .pb-pop{position:fixed;right:12px;left:auto;bottom:124px;width:min(420px,calc(100vw - 24px));box-sizing:border-box;max-height:70vh;overflow:auto;z-index:2147483000;display:none;padding:11px 12px;border-radius:16px;border:1px solid var(--pb-pop-br);background:var(--pb-pop-bg);-webkit-backdrop-filter:var(--pb-blur);backdrop-filter:var(--pb-blur);box-shadow:var(--pb-shadow);animation:pb-pop-in .18s ease;}\n#pb-root.open .pb-pop{display:block;}\n@keyframes pb-pop-in{from{opacity:0;transform:translateY(8px) scale(.98);}to{opacity:1;transform:none;}}\n\n#pb-root .pb-pop-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px;}\n#pb-root .pb-tabs{display:flex;gap:3px;}\n#pb-root .pb-tab{background:none;border:none;color:var(--pb-t3);font-size:15px;cursor:pointer;padding:2px 7px;border-radius:9px;opacity:.5;transition:opacity .15s,background .15s;}\n#pb-root .pb-tab:hover{opacity:.85;}\n#pb-root .pb-tab.on{opacity:1;background:rgba(240,168,196,0.18);}\n#pb-root .pb-cal-day:hover{filter:brightness(1.25);}\n#pb-root.pb-theme-light .pb-cal-day:hover{filter:brightness(0.94);}\n#pb-root .pb-cal-act{font:inherit;font-size:10px;color:var(--pb-t2);background:rgba(240,168,196,0.14);border:1px solid rgba(240,168,196,0.28);border-radius:9px;padding:5px 9px;cursor:pointer;}\n#pb-root .pb-cal-act:hover{background:rgba(240,168,196,0.24);}\n#pb-root .pb-more-btn{text-align:center;font-size:10px;color:var(--pb-t2);opacity:.85;cursor:pointer;padding:7px 4px 3px;letter-spacing:.02em;user-select:none;-webkit-user-select:none;}\n#pb-root .pb-more-btn:hover{opacity:1;}\n#pb-root .pb-title{font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--pb-t1);opacity:.9;}\n#pb-root .pb-tools{display:flex;align-items:center;gap:2px;}\n#pb-root .pb-tools button{background:none;border:none;color:var(--pb-t2);font-size:13px;cursor:pointer;opacity:.6;padding:2px 5px;border-radius:8px;transition:opacity .15s,transform .2s,background .15s;}\n#pb-root .pb-tools button:hover{opacity:1;background:rgba(240,168,196,0.14);}\n#pb-root .pb-refresh.spin{animation:pb-spin .9s linear infinite;opacity:1;}\n@keyframes pb-spin{to{transform:rotate(360deg);}}\n\n#pb-root .pb-cap{font-size:12px;color:var(--pb-t2);opacity:.8;padding:6px 2px;animation:pb-pulse 1.3s ease-in-out infinite;}\n#pb-root .pb-err{font-size:12px;color:#f0a0b4;padding:6px 2px;line-height:1.4;}\n#pb-root.pb-theme-light .pb-err{color:#c0405e;}\n@keyframes pb-pulse{0%,100%{opacity:.5;}50%{opacity:1;}}\n\n#pb-root .pb-widget{max-width:420px;margin:0 auto;}\n#pb-root .pb-widget details[open] .pb-arrow{transform:rotate(180deg);}\n#pb-root .pb-widget summary::-webkit-details-marker{display:none;}\n@keyframes pb-mpulse{0%,100%{box-shadow:0 0 8px currentColor;}50%{box-shadow:0 0 18px currentColor;}}\n\n/* форма настроек */\n#pb-root .pb-form{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--pb-t2);}\n#pb-root .pb-form label{opacity:.75;margin-top:6px;}\n#pb-root .pb-i{width:100%;box-sizing:border-box;background:var(--pb-input-bg);border:1px solid rgba(240,168,196,0.22);border-radius:8px;padding:7px 9px;color:var(--pb-t1);font:inherit;font-size:12px;outline:none;}\n#pb-root .pb-i:focus{border-color:rgba(240,168,196,0.5);}\n#pb-root .pb-form-btns{display:flex;gap:8px;margin-top:11px;}\n#pb-root .pb-save,#pb-root .pb-cancel{border:1px solid rgba(240,168,196,0.28);background:rgba(240,168,196,0.12);color:var(--pb-t1);font:inherit;font-size:12px;font-weight:600;padding:7px 13px;border-radius:10px;cursor:pointer;}\n#pb-root .pb-save:hover,#pb-root .pb-cancel:hover{background:rgba(240,168,196,0.2);}\n#pb-root .pb-hint{font-size:10px;color:var(--pb-t3);opacity:.7;line-height:1.35;margin-top:9px;}\n\n/* переключатель темы (сегментированный) */\n#pb-root .pb-themes{display:flex;gap:5px;margin-top:4px;}\n#pb-root .pb-th{flex:1;display:flex;align-items:center;justify-content:center;gap:4px;font:inherit;font-size:11px;color:var(--pb-t2);background:var(--pb-input-bg);border:1px solid rgba(240,168,196,0.22);border-radius:10px;padding:7px 6px;cursor:pointer;transition:background .15s,border-color .15s;}\n#pb-root .pb-th:hover{background:rgba(240,168,196,0.14);}\n#pb-root .pb-th.on{background:rgba(240,168,196,0.2);border-color:rgba(240,168,196,0.55);color:var(--pb-t1);font-weight:600;}"; // стили инжектятся в родительский документ (build.py подставит)
   var MARKUP =
     '<button class="pb-fab" type="button" title="цикл и беременность">🌸</button>' +
@@ -396,10 +396,12 @@ try {
     '  fact: <one short cute fact about this pregnancy week>',
     '  avoid: <what to avoid right now, short>',
     '  selfcare: <what would help her feel better now, short>',
+    '  pregnancy_ended: <нет|роды|выкидыш|прерывание>  — did the pregnancy END in the recent messages. If yes, switch to state=postpartum next turn (with pp_loss for a miscarriage/termination).',
     'For pregnancy, make symptoms/activity SPECIFIC to the actual week (e.g. morning sickness & fatigue early; quickening ~18-20 нед; heartburn, swelling, Braxton-Hicks late), not generic.',
     '',
     'If state = postpartum, output these keys:',
     '  state: postpartum',
+    '  pp_loss: <нет|выкидыш|прерывание>  — if this recovery follows a pregnancy LOSS (miscarriage or termination) rather than a birth. Then there is no baby and no lactation; the flavor must be about bleeding, hormonal crash and grief — gentle, never blaming.',
     '  pp_day: <int, days since birth, starting at 1>',
     '  pp_total: <int, expected total days of lochia/recovery, ~42>',
     '  lochia: <Обильные|Умеренные|Мажущие|Прошли>  (postpartum bleeding intensity)',
@@ -458,6 +460,8 @@ try {
     '',
     'If state = pregnancy, output the pregnancy keys (use OMEGAVERSE terms in free text — pup(s), knotting/knot conception, nest). Make symptoms/activity SPECIFIC to the actual week, not generic:',
     '  state: pregnancy | week | day | trimester | due | days_left | baby_size | baby_weight | activity | symptoms | weight_gain | milestone | milestone_days | insight | moodlet | attachment_boost | energy | energy_pct | cravings | care_tip | fact | avoid | selfcare',
+    '  pregnancy_ended: <нет|роды|выкидыш|прерывание> — did the pregnancy END in the recent messages (then switch to state=postpartum, with pp_loss for a miscarriage/termination).',
+    'If state = postpartum after a LOSS, output pp_loss: <выкидыш|прерывание> — no baby, no lactation, flavor about bleeding, hormonal crash and grief.',
     '',
     'If state = postpartum, output these keys (omegaverse terms ok — pup, nest):',
     '  state: postpartum | pp_day (days since birth, from 1) | pp_total (~42) | lochia <Обильные|Умеренные|Мажущие|Прошли> | bleeding_pct | lactation <Молозиво|Приходит молоко|Налаженная лактация|Нет> | recovery | symptoms | moodlet | insight | energy | energy_pct | cravings | care_tip | fact | avoid | selfcare',
@@ -632,7 +636,61 @@ try {
     return f;
   }
   var LOCHIA_LEN = 42; // базовый срок послеродового кровотечения (лохий), дней
+  // ── восстановление после прерванной беременности (выкидыш / прерывание) ──
+  function derivePostLoss(f) {
+    var total = num(f.pp_total, null); if (total == null || total < 7 || total > 60) total = lossTotal(f.pp_week); f.pp_total = total;
+    var pp = num(f.pp_day, 1); if (pp < 1) pp = 1; if (pp > 120) pp = 120; f.pp_day = pp;
+    var b = pp <= 3 ? 0 : pp <= 7 ? 1 : pp <= total ? 2 : 3;
+    if (!f.lochia) f.lochia = ['Обильные', 'Умеренные', 'Мажущие', 'Прошли'][b];
+    if (f.bleeding_pct == null) f.bleeding_pct = [80, 50, 22, 3][b];
+    if (!f.recovery) f.recovery = ['Первые дни', 'Тело заживает', 'Восстановление', 'Почти восстановилась'][b];
+    f.lactation = num(f.pp_week, 8) >= 16 && b < 2 ? 'Может прибывать молоко' : '';
+    if (!f.symptoms) f.symptoms = [
+      'кровотечение, спазмы внизу живота, слабость',
+      'кровотечение слабеет, гормональный откат, перепады настроения',
+      'мажущие выделения, усталость, эмоциональные качели',
+      'выделения прошли, тело восстановилось'
+    ][b];
+    if (!f.insight) f.insight = [
+      'Тело переживает потерю: кровит, матка сокращается. Сейчас нужны только покой и тепло.',
+      'Гормоны резко откатываются — отсюда слёзы и перепады. Это нормально и пройдёт.',
+      'Телу уже легче, а внутри может быть по-прежнему тяжело. Своё время у каждого своё.',
+      'Тело восстановилось, цикл скоро вернётся. Спешить с выводами и планами не нужно.'
+    ][b];
+    if (!f.care_tip) f.care_tip = [
+      'Быть рядом, взять быт на себя. Не искать слов — достаточно присутствия.',
+      'Не обесценивать и не торопить. Тепло, еда, сон, объятия по запросу.',
+      'Слушать, если захочет говорить, и не настаивать, если нет.',
+      'Просто быть рядом и не торопить с решениями.'
+    ][b];
+    if (!f.fact) f.fact = [
+      'Кровотечение после потери обычно длится от нескольких дней до двух недель.',
+      'Резкий гормональный откат объясняет слёзы и разбитость — это физиология.',
+      'Цикл обычно возвращается через 4–6 недель.',
+      'Большинство потерь на раннем сроке не влияет на будущие беременности.'
+    ][b];
+    if (!f.moodlet) f.moodlet = ['[опустошённость]', '[хрупкость]', '[тихая грусть]', '[принятие]'][b];
+    if (!f.avoid) f.avoid = [
+      'нагрузки, тяжёлое, ванну и бассейн, близость',
+      'переутомление, алкоголь, «бодрые» советы',
+      'перегруз, самообвинение',
+      'спешку с решениями'
+    ][b];
+    if (!f.selfcare) f.selfcare = [
+      'покой, тепло, обезболивание по назначению, кто-то рядом',
+      'сон, питьё, еда, разговор если хочется',
+      'прогулки, мягкий режим, поддержка',
+      'бережность к себе, возвращение к обычному ритму'
+    ][b];
+    if (!f.cravings) f.cravings = ['тишину и тепло', 'чтобы обняли', 'чтобы не трогали лишний раз', 'вернуться к себе'][b];
+    if (!f.energy) f.energy = ['Низкая', 'Низкая', 'Умеренная', 'Умеренная'][b];
+    if (f.energy_pct == null) f.energy_pct = [16, 28, 45, 60][b];
+    return f;
+  }
+  // срок кровотечения после потери зависит от срока, на котором она случилась
+  function lossTotal(week) { var w = num(week, 8); return w >= 20 ? 28 : w >= 12 ? 21 : 14; }
   function derivePostpartum(f) {
+    if (f.pp_loss) return derivePostLoss(f);
     var total = num(f.pp_total, LOCHIA_LEN); if (total < 14 || total > 90) total = LOCHIA_LEN; f.pp_total = total;
     var pp = num(f.pp_day, 1); if (pp < 1) pp = 1; if (pp > 120) pp = 120; f.pp_day = pp;
     // корзина восстановления: 0 — ранний (обильные), 1 — до 2 нед, 2 — до конца лохий (мажущие), 3 — лохии прошли
@@ -775,7 +833,9 @@ try {
     derivePostpartum(f);
     var pp = f.pp_day, total = f.pp_total;
     var b = pp <= 4 ? 0 : pp <= 14 ? 1 : pp <= total ? 2 : 3;
-    var AC = '224,96,120', SOFT = '244,168,186', HEX = 'var(--pb-c-pp)', ICON = '🤱';
+    var loss = !!f.pp_loss;
+    var AC = loss ? '170,150,200' : '224,96,120', SOFT = loss ? '210,190,230' : '244,168,186';
+    var HEX = loss ? 'var(--pb-c-fade)' : 'var(--pb-c-pp)', ICON = loss ? '🤍' : '🤱';
     // шкала спада кровотечения: обильные (0..4) / умеренные (4..14) / мажущие (14..total)
     var segs = [['Обильные', 0, 4, '224,84,104'], ['Умеренные', 4, 14, '224,120,140'], ['Мажущие', 14, total, '212,160,176']];
     var th = '', lb = '';
@@ -787,19 +847,19 @@ try {
     var pos = Math.max(0, Math.min(100, (pp / total) * 100));
     function cell(ic, label, val, col) { return '<div style="flex:1;min-width:0;background:rgba(var(--ac),0.08);border-radius:10px;padding:7px 3px;text-align:center;border:1px solid rgba(var(--ac),0.14);"><div style="font-size:6.5px;color:var(--pb-t3);margin-bottom:2px;">' + ic + ' ' + label + '</div><div style="font-size:8px;font-weight:700;color:' + (col || 'var(--hex)') + ';line-height:1.15;">' + esc(val) + '</div></div>'; }
     var bleedColor = colorLevel(f.bleeding_pct);
-    var rows = softRow('●', HEX, f.symptoms) + softRow('🍼 лактация:', HEX, f.lactation) + softRow('🍫 хочется:', HEX, f.cravings) + softRow('✨', HEX, f.fact) + softRow('⚠️ избегать:', HEX, f.avoid) + softRow('🛁 поможет:', HEX, f.selfcare) + careTipRow(f.care_tip) + insightRow(f.insight) + footRow(f.moodlet);
+    var rows = softRow('●', HEX, f.symptoms) + (loss ? '' : softRow('🍼 лактация:', HEX, f.lactation)) + softRow('🍫 хочется:', HEX, f.cravings) + softRow('✨', HEX, f.fact) + softRow('⚠️ избегать:', HEX, f.avoid) + softRow('🛁 поможет:', HEX, f.selfcare) + careTipRow(f.care_tip) + insightRow(f.insight) + footRow(f.moodlet);
     return '<div class="pb-widget" style="--ac:' + AC + ';--hex:' + HEX + ';--soft:' + SOFT + ';">' +
       '<details open class="pbc" style="border-radius:22px;overflow:hidden;position:relative;background:var(--pb-card);border:1px solid rgba(var(--ac),0.28);box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 22px rgba(var(--ac),0.14),inset 0 1px 0 rgba(255,255,255,0.09);">' +
       '<div style="position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(130% 100% at 100% 0%, rgba(var(--ac),0.3), transparent 60%);"></div>' +
       '<summary style="cursor:pointer;list-style:none;outline:none;position:relative;z-index:4;"><div style="padding:12px 15px;display:flex;align-items:center;gap:11px;border-bottom:1px solid rgba(var(--ac),0.14);">' +
       '<div style="width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 32% 28%,rgba(var(--ac),0.5),rgba(var(--ac),0.12));display:flex;align-items:center;justify-content:center;font-size:16px;border:1px solid rgba(var(--ac),0.45);box-shadow:0 0 16px rgba(var(--ac),0.45);flex-shrink:0;">' + ICON + '</div>' +
-      '<div style="flex:1;min-width:0;"><div style="font-size:10px;font-weight:700;color:var(--pb-t1);">После родов · день ' + esc(pp) + '</div><div style="display:flex;align-items:center;gap:6px;margin-top:2px;"><span style="font-size:8px;font-weight:700;color:' + HEX + ';">' + esc(f.recovery) + '</span><span style="font-size:8px;color:var(--pb-t3);">· ' + (b < 3 ? 'лохии ещё ' + Math.max(0, total - pp) + ' дн' : 'лохии прошли') + '</span></div></div>' +
+      '<div style="flex:1;min-width:0;"><div style="font-size:10px;font-weight:700;color:var(--pb-t1);">' + (loss ? 'После потери · день ' : 'После родов · день ') + esc(pp) + '</div><div style="display:flex;align-items:center;gap:6px;margin-top:2px;"><span style="font-size:8px;font-weight:700;color:' + HEX + ';">' + esc(f.recovery) + '</span><span style="font-size:8px;color:var(--pb-t3);">· ' + (b < 3 ? 'выделения ещё ' + Math.max(0, total - pp) + ' дн' : (loss ? 'цикл вернётся в ближайшие недели' : 'лохии прошли')) + '</span></div></div>' +
       '<span class="pb-arrow" style="font-size:10px;color:' + HEX + ';transition:transform .3s;flex-shrink:0;">▼</span></div></summary>' +
       '<div style="padding:14px 16px 11px;position:relative;z-index:4;">' +
       '<div style="position:relative;height:30px;margin-bottom:5px;"><div style="position:absolute;left:0;right:0;top:11px;height:6px;border-radius:6px;overflow:hidden;display:flex;box-shadow:0 0 12px rgba(var(--ac),0.3);">' + th + '</div>' +
       '<div style="position:absolute;top:6px;width:16px;height:16px;border-radius:50%;transform:translateX(-50%);border:2px solid rgba(255,255,255,0.75);animation:pb-mpulse 2.8s ease-in-out infinite;z-index:2;left:' + pos + '%;background:radial-gradient(circle,' + HEX + ',rgba(0,0,0,0.15));"></div></div>' +
       '<div style="display:flex;justify-content:space-between;font-size:6.5px;margin-bottom:11px;">' + lb + '</div>' +
-      '<div style="display:flex;gap:5px;margin-bottom:9px;">' + cell('🩸', 'Выделения', f.lochia, bleedColor) + cell('🌿', 'Восстан.', f.recovery, HEX) + cell('⚡', 'Энергия', f.energy, energyColorOf(f.energy)) + cell('🍼', 'Лактация', f.lactation, HEX) + '</div>' +
+      '<div style="display:flex;gap:5px;margin-bottom:9px;">' + cell('🩸', 'Выделения', f.lochia, bleedColor) + cell('🌿', 'Восстан.', f.recovery, HEX) + cell('⚡', 'Энергия', f.energy, energyColorOf(f.energy)) + (loss ? cell('📅', 'Цикл', '~4–6 нед', HEX) : cell('🍼', 'Лактация', f.lactation, HEX)) + '</div>' +
       moreBlock(rows) + '</div></details></div>';
   }
 
@@ -848,7 +908,7 @@ try {
       var pp0 = num(f.pp_day, 1), tot = num(f.pp_total, LOCHIA_LEN);
       var birth = addDays(gd, -(pp0 - 1));
       var dd = diffDays(date, birth); // 0 = день родов, дальше — дни после
-      if (dd === 0) return { bg: 'rgba(232,90,110,0.34)', mark: '👶' };
+      if (dd === 0) return f.pp_loss ? { bg: 'rgba(170,150,200,0.34)', mark: '🤍' } : { bg: 'rgba(232,90,110,0.34)', mark: '👶' };
       if (dd > 0 && dd < tot) { var a = dd < 4 ? 0.36 : dd < 10 ? 0.26 : 0.15; return { bg: 'rgba(224,80,104,' + a + ')', mark: dd < 4 ? '🩸' : '' }; }
       return {};
     }
@@ -901,7 +961,7 @@ try {
     var rx = (num(f.delay, 0) > 0 ? legendItem('240,150,90', '⏳ задержка') : '') + ((f._actDays || []).length ? '<span>💞 ПА</span>' : '') + ((f._testDays || []).length ? '<span>🧪 тест</span>' : '');
     if (f.state === 'heat' || f.slick != null) return legendItem('232,90,130', '🔥 течка') + legendItem('236,176,108', 'предтечка') + legendItem('198,150,210', 'послетечка') + legendItem('150,170,214', 'покой') + rx;
     if (f.state === 'rut' || f.knot != null) return legendItem('200,80,80', '🐺 гон') + legendItem('236,176,108', 'предгон') + legendItem('170,150,200', 'спад') + legendItem('150,170,214', 'покой');
-    if (f.state === 'postpartum' || f.pp_day != null) return '<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:9px;height:9px;border-radius:50%;background:rgba(232,90,110,0.7);display:inline-block;"></span>👶 роды</span>' + legendItem('224,80,104', '🩸 лохии') + '<span style="color:var(--pb-t4);">(спадают к ' + num(f.pp_total, LOCHIA_LEN) + ' дню)</span>';
+    if (f.state === 'postpartum' || f.pp_day != null) return '<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:9px;height:9px;border-radius:50%;background:rgba(232,90,110,0.7);display:inline-block;"></span>' + (f.pp_loss ? '🤍 потеря' : '👶 роды') + '</span>' + legendItem('224,80,104', '🩸 лохии') + '<span style="color:var(--pb-t4);">(спадают к ' + num(f.pp_total, LOCHIA_LEN) + ' дню)</span>';
     if (f.state === 'pregnancy' || f.week != null) return '<span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:9px;height:9px;border-radius:50%;border:2px solid var(--pb-c-due);box-sizing:border-box;display:inline-block;"></span>👶 ПДР</span>' + legendItem('150,214,182', '1 трим.') + legendItem('244,196,150', '2 трим.') + legendItem('244,176,200', '3 трим.');
     return legendItem('232,108,116', '🩸 месячные') + legendItem('198,124,210', '💜 овуляция') + legendItem('120,200,156', 'фолл.') + legendItem('236,176,108', 'лют.') + rx;
   }
@@ -913,7 +973,7 @@ try {
     if (f.state === 'heat' || f.slick != null) b += '<button class="pb-cal-act" data-act="heat" type="button">🔥 началась течка</button>';
     else if (f.state === 'rut' || f.knot != null) b += '<button class="pb-cal-act" data-act="rut" type="button">🐺 начался гон</button>';
     else if (f.state === 'postpartum' || f.pp_day != null) b += '<button class="pb-cal-act" data-act="birth" type="button">👶 роды сюда</button>';
-    else if (f.state === 'pregnancy' || f.week != null) b += '<button class="pb-cal-act" data-act="due" type="button">🍼 сюда ПДР</button>';
+    else if (f.state === 'pregnancy' || f.week != null) b += '<button class="pb-cal-act" data-act="due" type="button">🍼 сюда ПДР</button><button class="pb-cal-act" data-act="loss" type="button">💔 беременность прервалась</button>';
     else b += '<button class="pb-cal-act" data-act="period" type="button">🩸 месячные</button><button class="pb-cal-act" data-act="ovu" type="button">💜 овуляция</button>';
     if (reproOn() && !(f.state === 'rut' || f.knot != null) && !(f.state === 'pregnancy' || f.week != null) && !(f.state === 'postpartum' || f.pp_day != null)) b += '<button class="pb-cal-act" data-act="act0" type="button">💞 ПА без защиты</button><button class="pb-cal-act" data-act="act1" type="button">🛡 ПА с защитой</button><button class="pb-cal-act" data-act="test" type="button">🧪 сделать тест</button><button class="pb-cal-act" data-act="testp" type="button">✅ тест был «+»</button><button class="pb-cal-act" data-act="testn" type="button">❌ тест был «−»</button>';
     b += '<button class="pb-cal-act" data-act="today" type="button">📅 сделать сегодня</button><button class="pb-cal-act" data-act="cancel" type="button">✕</button>';
@@ -948,6 +1008,13 @@ try {
   async function markDay(date, type) {
     var st = await tavo.get(ST_KEY, 'chat'); var f = (st && st.fields) || {}; var len = num(f.length, 28); if (len < 4) len = 28;
     if (type === 'due') { await tavo.set(ANCHOR_KEY, { kind: 'pregnancy', due: toISO(date) }, 'chat'); }
+    else if (type === 'loss') {
+      var wk = num(f.week, 8);
+      await tavo.set(ANCHOR_KEY, { kind: 'postpartum', birth: toISO(date), total: lossTotal(wk), loss: true, week: wk }, 'chat');
+      var rl = await loadRepro(); rl.conc = null; rl.acts = []; rl.tests = []; await saveRepro();
+      diagPush('беременность', 'прервалась на ' + wk + ' нед (' + toISO(date) + ')');
+      toast('отмечено · восстановление');
+    }
     else if (type === 'birth') { await tavo.set(ANCHOR_KEY, { kind: 'postpartum', birth: toISO(date), total: num(f.pp_total, LOCHIA_LEN) }, 'chat'); }
     else if (type === 'act0' || type === 'act1') {
       var ra = await loadRepro(), ana = await tavo.get(ANCHOR_KEY, 'chat');
@@ -1249,7 +1316,7 @@ try {
     }
     if (f.state === 'postpartum' || f.pp_day != null) {
       var ap = await tavo.get(ANCHOR_KEY, 'chat');
-      var tot = num(f.pp_total, LOCHIA_LEN); if (tot < 14 || tot > 90) tot = LOCHIA_LEN;
+      var tot = num(f.pp_total, LOCHIA_LEN); if (tot < 7 || tot > 90) tot = LOCHIA_LEN;
       if (!ap || ap.kind !== 'postpartum' || !ap.birth) {
         var pd = num(f.pp_day, 1); if (pd < 1) pd = 1;
         ap = { kind: 'postpartum', birth: toISO(addDays(gd, -(pd - 1))), total: tot };
@@ -1257,6 +1324,7 @@ try {
       }
       var since = diffDays(gd, parseISO(ap.birth));
       f.pp_day = Math.max(1, since + 1); f.pp_total = num(ap.total, tot);
+      if (ap.loss) { f.pp_loss = ap.loss; f.pp_week = ap.week; }
       return f;
     }
     var kind = cycleKind();
@@ -1324,9 +1392,10 @@ try {
     }
     if (f.state === 'postpartum' || f.pp_day != null) {
       derivePostpartum(f);
-      b.push('после родов, день ' + f.pp_day + ' (' + f.recovery + ')');
+      b.push(f.pp_loss ? ('после прерванной беременности (' + f.pp_loss + '), день ' + f.pp_day + ' — тема болезненная, без обвинений и без «зато»') : ('после родов, день ' + f.pp_day + ' (' + f.recovery + ')'));
       if (f.lochia) b.push('послеродовые выделения (лохии): ' + f.lochia);
       if (f.lactation) b.push('лактация: ' + f.lactation);
+      if (f.pp_loss && f.recovery) b.push('восстановление: ' + f.recovery);
       if (f.symptoms) b.push('самочувствие: ' + f.symptoms);
       if (f.energy) b.push('энергия: ' + f.energy);
       if (f.moodlet) b.push('настроение: ' + String(f.moodlet).replace(/[\[\]]/g, ''));
@@ -1509,6 +1578,18 @@ try {
         if (await processEvents(f, gd)) f = { state: 'pregnancy', date: f.date };
       }
       stripEvents(f);
+      // сюжет закончил беременность: роды / выкидыш / прерывание
+      var pe = String(f.pregnancy_ended || '').toLowerCase();
+      if (/выкид|прерыв|роды|miscar|abort|birth/.test(pe)) {
+        var wkE = num(f.week, 8), isLoss = /выкид|прерыв|miscar|abort/.test(pe);
+        await tavo.set(ANCHOR_KEY, isLoss
+          ? { kind: 'postpartum', birth: toISO(gd), total: lossTotal(wkE), loss: /прерыв|abort/.test(pe) ? 'прерывание' : 'выкидыш', week: wkE }
+          : { kind: 'postpartum', birth: toISO(gd), total: LOCHIA_LEN }, 'chat');
+        var rE = await loadRepro(); rE.conc = null; rE.acts = []; rE.tests = []; await saveRepro();
+        diagPush('беременность', (isLoss ? 'прервалась' : 'роды') + ' по сюжету на ' + wkE + ' нед');
+        f = { state: 'postpartum', pp_day: 1, date: f.date };
+      }
+      delete f.pregnancy_ended;
       // только что подтверждённую беременность не отдаём обратно в цикл, если считалка «забыла»
       var anNow = await tavo.get(ANCHOR_KEY, 'chat');
       if (anNow && anNow.kind === 'pregnancy' && anNow.confirmed && (f.state === 'cycle' || f.state === 'heat') && diffDays(gd, parseISO(anNow.confirmed)) < 14) f = { state: 'pregnancy', date: f.date };
